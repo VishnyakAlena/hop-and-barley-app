@@ -19,6 +19,7 @@ function Product({product}:PropsType) {
     return (
         <div data-testid={product.id} className="character" onClick={goToProductPage}>
             <Image 
+                className='w-full h-auto'
                 src={product.image} 
                 width={300} 
                 height={300} 

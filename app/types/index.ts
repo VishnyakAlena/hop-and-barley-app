@@ -7,4 +7,11 @@ export interface Iproduct {
     image: string
 }
 
+export interface ICartProduct {
+    totalPrice: number,
+    product: Iproduct,
+    quantity: number,
+    id: number
+}
+
 export type IBarleysResponse = Iproduct[]
