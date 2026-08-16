@@ -26,7 +26,7 @@ function Product({product}:PropsType) {
                 alt="product.name"
                 loading="eager"
             />
-            <p>Name: {product.name}</p>
+            <p>{product.name}</p>
             <p>${product.price}</p>
             <p>{product.shortDescription}</p>
         </div>
