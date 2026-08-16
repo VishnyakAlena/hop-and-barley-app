@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { ICartProduct, Iproduct } from '../../types'
+import { ICartProduct, Iproduct, IReviewFull, IUserMock } from '../../types'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '../../store/storeHooks'
 import { addProduct, removeProduct } from '../../store/slices/cartSlice'
@@ -26,10 +26,6 @@ function ProductPageComponent({product}:PropsType) {
         dispatch(removeProduct(product))
     }
 
-    function goToCart() {
-        router.push('/cart')
-    }
-
     useEffect(() => {
         const itemProduct = products.find(item => item.id === product.id)
 
@@ -41,6 +37,8 @@ function ProductPageComponent({product}:PropsType) {
     }, [products, product.id])
 
     const [isOpen, setIsOpen] = useState(false);
+
+    console.log("ОТЗЫВЫ ИЗ API:", product.latestReviews);
 
     return (
         <main className="page-product">
@@ -108,6 +106,55 @@ function ProductPageComponent({product}:PropsType) {
                                     </div>
                                 )}
                             </div>
+                        </section>
+                        <section className="reviews-section">
+                            <h2 className="reviews-title">Latest reviews</h2>
+                            <div className="reviews-grid">
+                                {product.latestReviews?.map((review: IReviewFull) => (
+                                    <div className="review-card">
+                                        <div className="review-rating">
+                                            {/* 1. Генерируем ЗАКРАШЕННЫЕ звёзды */}
+                                            {[...Array(review.rating)].map((_, index) => (
+                                                <svg
+                                                    key={`filled-${index}`}
+                                                    className="star-icon star-icon--filled"
+                                                    xmlns="http://w3.org"
+                                                    viewBox="0 0 24 24"
+                                                    width="18"
+                                                    height="18"
+                                                    >
+                                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                </svg>
+                                            ))}
+
+                                            {/* 2. Генерируем ПУСТЫЕ (контурные) звёзды до 5 штук */}
+                                            {[...Array(5 - review.rating)].map((_, index) => (
+                                                <svg
+                                                    key={`empty-${index}`}
+                                                    className="star-icon star-icon--empty"
+                                                    xmlns="http://w3.org"
+                                                    viewBox="0 0 24 24"
+                                                    width="18"
+                                                    height="18"
+                                                >
+                                                <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" />
+                                                </svg>
+                                            ))}
+                                        </div>
+                                        <div className="review-body">
+                                            <h4 className="review-heading">{review.title}</h4>
+                                            <p className="review-text">{review.comment}</p>
+                                        </div>
+                                        <div className="review-author">
+                                            <Image src={review.userImage} alt={review.userName} width={40} height={40} className="author-avatar" />
+                                            <span className="author-name">{review.userName}</span>
+                                        </div>
+
+                                    </div>
+                                ))}
+                            </div>
+
+
                         </section>
             </div>
         </main>

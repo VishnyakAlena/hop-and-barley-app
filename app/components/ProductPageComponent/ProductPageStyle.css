@@ -195,6 +195,97 @@
     transform: rotate(180deg);
 }
 
+.reviews-section {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.reviews-title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--black-main);
+}
+
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 32px;
+}
+
+.review-card {
+    padding: 24px;
+    background-color: var(--background-default);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.review-rating {
+    display: flex;
+    gap: 4px;
+}
+
+.review-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.review-heading {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #1e1e1e;
+}
+
+.review-text {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #1e1e1e;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-name {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--grey-text);
+}
+
+
+.star-icon {
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* Стили для закрашенных звёзд */
+.star-icon--filled {
+    color: #ffb100; /* Насыщенный золотой цвет */
+    fill: #ffb100;
+}
+
+/* Стили для пустых звёзд (оставляем только аккуратный серый контур) */
+.star-icon--empty {
+    color: var(--border-dark-grey); /* Серый цвет из вашей палитры */
+    fill: transparent;
+}
+
 
 
 

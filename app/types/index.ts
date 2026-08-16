@@ -1,6 +1,16 @@
 export interface ISpecificationsItem {
-    label: string;  // Название параметра (например: "Origin")
-    value: string;  // Показатель (например: "USA")
+    label: string; 
+    value: string;  
+}
+
+export interface IReviewFull {
+    id: number;
+    userId: number;
+    rating: number;
+    title: string;
+    comment: string;
+    userName: string;        
+    userImage: string;       
 }
 
 export interface Iproduct {
@@ -11,7 +21,8 @@ export interface Iproduct {
     shortDescription: string,
     description: string[],
     image: string,
-    technicalSpecifications: ISpecificationsItem[];
+    technicalSpecifications: ISpecificationsItem[],
+    latestReviews?: IReviewFull[]
 }
 
 export interface ICartProduct {
@@ -22,3 +33,15 @@ export interface ICartProduct {
 }
 
 export type IProductsAllInfoResponse = Iproduct[]
+
+export interface IUserMock {
+    id: number;
+    name: string;
+    image: string; 
+    email: string;
+}
+
+export type IUsersAllInfoResponse = IUserMock[]
+
+
+
