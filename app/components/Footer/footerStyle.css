@@ -1,6 +1,6 @@
 footer {
     width: 100%;
-    padding: 48px 64px 24px 64px;
+    padding: 48px 0 24px 0;
     background-color: var(--black-main);
     color: var(--white-text);
     display: flex;
@@ -17,14 +17,19 @@ footer {
     gap: 48px;
 }
 
+.footer__hops-logo-wrapper {
+    min-width: 300px;
+    max-width: 500px;
+    padding: 0 20px;
+}
+
 .footer__hops-logo {
-    width: 483.92px;
-    height: 263.53px;
+    width: 100%;
+    object-fit: contain;
 }
 
 .footer__nav {
-    width: 640px;
-    height: 37px;
+    max-width: 640px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,4 +61,11 @@ footer {
     font-size: 14px;
     line-height: 20px;
     color: var(--white-text);
+}
+
+@media (max-width: 768px) {
+    .footer__nav ul {
+        flex-direction: column;
+        gap: 8px;
+    }
 }

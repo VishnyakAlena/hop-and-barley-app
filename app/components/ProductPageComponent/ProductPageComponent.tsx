@@ -46,7 +46,7 @@ function ProductPageComponent({product}:PropsType) {
                 <section className="product-details-section" data-testid={product.id}>
                     <div className="product-image-container">
                         <Image 
-                            className='w-full h-auto'
+                            className='product-image'
                             src={product.image} 
                             fill
                             sizes="(max-width: 640px) 100vw, 50vw"
@@ -115,29 +115,21 @@ function ProductPageComponent({product}:PropsType) {
                                         <div className="review-rating">
                                             {/* 1. Генерируем ЗАКРАШЕННЫЕ звёзды */}
                                             {[...Array(review.rating)].map((_, index) => (
-                                                <svg
-                                                    key={`filled-${index}`}
-                                                    className="star-icon star-icon--filled"
-                                                    xmlns="http://w3.org"
-                                                    viewBox="0 0 24 24"
-                                                    width="18"
-                                                    height="18"
-                                                    >
-                                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                                </svg>
-                                            ))}
+                                                <svg className="star-icon star-icon--filled" viewBox="0 0 24 24" width="18" height="18">
+                                                    <path d="M12 2a1 1 0 0 1 .93.64l2.28 4.93 5.38.45a1 1 0 0 1 .57 1.74l-4 3.65 1.19 5.3a1 1 0 0 1-1.49 1.08L12 17.15l-4.86 2.64a1 1 0 0 1-1.49-1.08l1.19-5.3-4-3.65a1 1 0 0 1 .57-1.74l5.38-.45 2.28-4.93A1 1 0 0 1 12 2z" />
+                                                    </svg>
+                                                ))}
 
                                             {/* 2. Генерируем ПУСТЫЕ (контурные) звёзды до 5 штук */}
                                             {[...Array(5 - review.rating)].map((_, index) => (
-                                                <svg
-                                                    key={`empty-${index}`}
-                                                    className="star-icon star-icon--empty"
-                                                    xmlns="http://w3.org"
-                                                    viewBox="0 0 24 24"
-                                                    width="18"
-                                                    height="18"
-                                                >
-                                                <path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z" />
+                                                <svg className="star-icon star-icon--empty" viewBox="0 0 24 24" width="18" height="18">
+                                                    <path 
+                                                        d="M12 2a1 1 0 0 1 .93.64l2.28 4.93 5.38.45a1 1 0 0 1 .57 1.74l-4 3.65 1.19 5.3a1 1 0 0 1-1.49 1.08L12 17.15l-4.86 2.64a1 1 0 0 1-1.49-1.08l1.19-5.3-4-3.65a1 1 0 0 1 .57-1.74l5.38-.45 2.28-4.93A1 1 0 0 1 12 2z" 
+                                                        fill="none"
+                                                        stroke="#ffb100"
+                                                        strokeWidth="2"
+                                                        strokeLinejoin="round"
+                                                    />
                                                 </svg>
                                             ))}
                                         </div>

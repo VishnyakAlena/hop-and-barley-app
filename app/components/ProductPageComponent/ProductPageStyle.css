@@ -272,19 +272,10 @@
 .star-icon {
     flex-shrink: 0;
     display: inline-block;
+    fill: #ffb100; 
 }
 
-/* Стили для закрашенных звёзд */
-.star-icon--filled {
-    color: #ffb100; /* Насыщенный золотой цвет */
-    fill: #ffb100;
-}
 
-/* Стили для пустых звёзд (оставляем только аккуратный серый контур) */
-.star-icon--empty {
-    color: var(--border-dark-grey); /* Серый цвет из вашей палитры */
-    fill: transparent;
-}
 
 
 

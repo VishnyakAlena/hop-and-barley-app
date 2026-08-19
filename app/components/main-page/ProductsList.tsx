@@ -1,18 +1,18 @@
-import { IProductsAllInfoResponse } from "@/app/types";
+import { Iproduct, IProductsAllInfoResponse } from "@/app/types";
 import Product from "./Product";
+import './ProductsListStyle.css'
 
-export default async function ProductsList() {
+interface ProductsListProps {
+    products: Iproduct[]; 
+}
 
-    const response = await fetch('http://localhost:3000/api/productsAllInfo', {
-        next: { 
-            revalidate: 60 * 60,
-        }
-    });
-    const data:IProductsAllInfoResponse = await response.json() 
+export default function ProductsList({ products }: ProductsListProps ) {
 
     return (
         <div className="product-grid">
-            {data && data.map(item => <Product product={item} key={item.id}/>)}
+            {products?.map((product) => (
+                <Product key={product.id} product={product}/>
+            ))}
         </div>
     )
 }

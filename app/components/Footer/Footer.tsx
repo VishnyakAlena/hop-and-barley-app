@@ -7,7 +7,9 @@ export default function Footer() {
     return (
         <footer>
             <div className="footer-container container">
-                <Image src="/images/background/image-footer.svg" width={484} height={264} alt="Hop & Barley Hops Logo" className="footer__hops-logo" />
+                <div className="footer__hops-logo-wrapper">
+                    <Image src="/images/background/image-footer.svg" width={484} height={264} alt="Hop & Barley Hops Logo" className="footer__hops-logo" />
+                </div>
                 <nav className="footer__nav">
                     <ul>
                         <li><Link className="footer__nav-link" href="#">Contact</Link></li>

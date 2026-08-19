@@ -7,6 +7,8 @@ header {
     justify-content: center;
     align-items: center;
     padding: 32px 0;
+    position: relative;
+    z-index: 9999;
 }
 
 .header-container {
@@ -20,7 +22,6 @@ header {
     display: flex;
     align-items: center;
     gap: 24px;
-
 }
 
 .header__logo img {
@@ -51,19 +52,23 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 24px;
 }
 
 .header__nav-link {
+    display: inline-block; /* Чтобы работал transform: scale */
     padding: 8px;
     font-size: 16px;
     line-height: 1;
     color: var(--black-main);
     font-weight: 500;
-    transition: color 0.2s ease;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease; 
 }
 
 .header__nav-link:hover {
     color: var(--dark-green);
+    transform: scale(1.05);
 }
 
 .header__auth-user {
@@ -80,4 +85,154 @@ header {
     gap: 12px;
 }
 
+.burger-icon {
+    display: none;
+    flex-direction: column;
+    gap: 7px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    cursor: pointer;
+}
 
+.burger-icon .line1, 
+.burger-icon .line2, 
+.burger-icon .line3 {
+    height: 2px;
+    background-color: var(--black-main); 
+    border-radius: 2px;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.burger-icon .line2 {
+    width: 16px;
+}
+
+.burger-icon .line1, 
+.burger-icon .line3 {
+    width: 30px;
+}
+
+.burger-icon._open .line2 {
+    opacity: 0; 
+}
+
+.burger-icon._open .line1 {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.burger-icon._open .line3 {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.burger-menu {
+    display: none;
+}
+
+body.lock-scroll {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+
+    .header__nav {
+        display: none; 
+    }
+
+    .burger-icon {
+        display: flex; 
+    }
+
+    .burger-menu {
+        display: none; 
+        position: fixed;
+        top: 100px; 
+        left: 0;
+        z-index: 1000;
+        width: 100%;
+        height: calc(100dvh - 100px);
+        padding: clamp(48px, 5vw, 64px) clamp(20px, 1.5vw + 14px, 32px);
+        box-sizing: border-box; 
+        overflow-y: auto;
+        background-color: var(--background-grey);
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    .burger-menu.active, 
+    .burger-menu.closing {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        z-index: 1000;
+    }
+
+    .burger-menu.active {
+        pointer-events: auto !important;
+        animation: fromRightToLeft 0.4s ease-in-out forwards;
+    }
+
+    .burger-menu.closing {
+        pointer-events: none;
+        animation: closingMenu 0.4s ease-in-out forwards;
+    }
+
+    .burger-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .burger-menu .header__nav-link {
+        display: block;
+        width: 100%;
+        text-align: left;
+        font-size: clamp(1.8rem, 1.33rem + 2vw, 2.5rem);
+        color: var(--black-main);
+        text-decoration: none;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-default);
+        cursor: pointer !important; /* Восстановили pointer-палец */
+        transition: color 0.2s ease, transform 0.2s ease; 
+    }
+
+    .burger-menu .header__nav-link:hover,
+    .burger-menu .header__nav-link:active {
+        color: var(--dark-green);
+        transform: scale(1.02);
+    }
+
+    .header__nav-and-auth {
+        gap: 16px;
+    }
+
+    .logo-text {
+        display: none; 
+    }
+} 
+
+@keyframes fromRightToLeft {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes closingMenu {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}

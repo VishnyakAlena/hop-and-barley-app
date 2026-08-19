@@ -17,17 +17,19 @@ function Product({product}:PropsType) {
     }
 
     return (
-        <div data-testid={product.id} className="character" onClick={goToProductPage}>
-            <Image 
-                className='w-full h-auto'
-                src={product.image} 
-                width={300} 
-                height={300} 
-                alt="product.name"
-                loading="eager"
-            />
+        <div data-testid={product.id} className="list-product-card" onClick={goToProductPage}>
+            <div className="product-card__image-container">
+                <Image 
+                    className='product-card__image'
+                    src={product.image} 
+                    width={272} 
+                    height={247} 
+                    alt={product.name}
+                    loading="eager"
+                />
+            </div>
             <p>{product.name}</p>
-            <p>${product.price}</p>
+            <p>${Number(product.price).toFixed(2)}</p>
             <p>{product.shortDescription}</p>
         </div>
     )
