@@ -1,23 +1,20 @@
-'use client'
-'use client'
 
-import { useRouter } from 'next/navigation' 
 import Image from 'next/image'
 import { Iproduct } from '../../types'
+import Link from 'next/link'; 
 
 type PropsType = {
     product: Iproduct
 }
 
 function Product({product}:PropsType) {
-    const router = useRouter()
-    
-    const goToProductPage = () => {
-        router.push(`/product/${product.id}`)
-    }
 
     return (
-        <div data-testid={product.id} className="list-product-card" onClick={goToProductPage}>
+        <Link
+            href={`/product/${product.id}`}
+            data-testid={product.id} 
+            className="list-product-card"
+        >
             <div className="product-card__image-container">
                 <Image 
                     className='product-card__image'
@@ -31,7 +28,7 @@ function Product({product}:PropsType) {
             <p>{product.name}</p>
             <p>${Number(product.price).toFixed(2)}</p>
             <p>{product.shortDescription}</p>
-        </div>
+        </Link>
     )
 }
 

@@ -1,5 +1,5 @@
 import { Iproduct, IProductsAllInfoResponse } from "@/app/types";
-import Product from "./Product";
+import Product from "./ProductCard";
 import './ProductsListStyle.css'
 
 interface ProductsListProps {

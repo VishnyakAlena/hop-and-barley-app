@@ -123,15 +123,21 @@ export default function Home() {
 
                     {totalPages > 1 && (
                         <div className="pagination">
-                            <Link href="#" className="pagination__link pagination__link--prev" onClick={handlePrevPage}>
-                                <i className="fa-solid fa-arrow-left"></i>
+                            <Link 
+                                href={`?page=${currentPage - 1}`}  
+                                className={`pagination__link pagination__link--prev ${currentPage === 1 ? 'disabled' : ''}`} 
+                                onClick={handlePrevPage}
+                            >
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.3333 5.66667H1M5.66667 1L1 5.66667L5.66667 10.3333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
                                 <span>Previous</span>
                             </Link>
                             <div className="pagination-list">
                                 {pageNumbers.map((number) => (
                                     <Link
                                         key={number}
-                                        href="#"
+                                        href="{`?page=${number}`}"
                                         className={`pagination__link ${currentPage === number ? 'active' : ''}`}
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -142,9 +148,15 @@ export default function Home() {
                                     </Link>
                                 ))}
                             </div>
-                            <Link href="#" className="pagination__link pagination__link--next" onClick={handleNextPage}>
+                            <Link 
+                                href={`?page=${currentPage + 1}`}  
+                                className={`pagination__link pagination__link--next ${currentPage === totalPages ? 'disabled' : ''}`} 
+                                onClick={handleNextPage}
+                            >
                                 <span>Next</span>
-                                <i className="fa-solid fa-arrow-right"></i>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 5.66667H10.3333M5.66667 10.3333L10.3333 5.66667L5.66667 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
                             </Link>
                         </div>
                     )}

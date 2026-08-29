@@ -383,11 +383,7 @@ p, h1, h2, h3, h4, h5, h6 {
     gap: 8px;
 }
 
-.pagination__link--prev,
-.pagination__link--next {
-    color: var(--grey-text);
-    opacity: 0.5;
-}
+
 
 .pagination__link--prev:hover,
 .pagination__link--next:hover {
@@ -406,8 +402,10 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .pagination__link.disabled {
     opacity: 0.4;
-    pointer-events: none; /* Полностью отключает кликабельность кнопки */
+    pointer-events: none;
     cursor: default;
+    color: var(--grey-text);
+    opacity: 0.5;
 }
 
 @media (max-width: 1399px) {

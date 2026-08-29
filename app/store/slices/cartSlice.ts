@@ -1,6 +1,7 @@
 import { ICartProduct, Iproduct } from "@/app/types";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../index";
 
 interface ICartState {
     products: ICartProduct[],
@@ -16,41 +17,19 @@ const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        addProduct: (state, action: PayloadAction<Iproduct>) => {
-            const productIndex = state.products.findIndex(item => item.id === action.payload.id)
-
-            if(productIndex !== -1) {
-                state.products[productIndex].quantity = Number(state.products[productIndex].quantity) + 1;
-                state.products[productIndex].totalPrice = Number(state.products[productIndex].totalPrice) + Number(action.payload.price);
-            } else {
-                const newProduct:ICartProduct = {
-                    quantity: 1,
-                    totalPrice: action.payload.price,
-                    id: action.payload.id,
-                    product: action.payload
-                }
-                state.products.push(newProduct)
-            }
-
-            state.total = state.products.reduce((sum, item) => sum + Number(item.totalPrice), 0);
+        setCart: (state, action: PayloadAction<ICartProduct[]>) => {
+            state.products = action.payload;
         },
-        removeProduct: (state, action: PayloadAction<Iproduct>) => {
-            const productIndex = state.products.findIndex(item => item.id === action.payload.id)
-
-            if(productIndex === -1) return
-            
-            if (state.products[productIndex].quantity === 1) {
-                // Безопасное удаление элемента через splice (не ломает прокси-стейт Immer)
-                state.products.splice(productIndex, 1);
-            } else {
-                // 3. Если товаров больше одного — уменьшаем количество и стоимость этой позиции
-                state.products[productIndex].quantity = Number(state.products[productIndex].quantity) - 1;
-                state.products[productIndex].totalPrice = Number(state.products[productIndex].totalPrice) - Number(action.payload.price);
-            }
-            state.total = state.products.reduce((sum, item) => sum + Number(item.totalPrice), 0);
-        },
+        
+        // Экшен для полной очистки корзины (понадобится после успешного оформления заказа)
+        clearCart: (state) => {
+            state.products = [];
+        }
     }
 })
 
-export const {addProduct, removeProduct} = cartSlice.actions
+export const {setCart, clearCart} = cartSlice.actions
 export default cartSlice.reducer
+export const selectTotalCartPrice = (state: RootState) => {
+    return state.cart.products.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+};
