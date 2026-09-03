@@ -1,12 +1,12 @@
 'use client'
 
-import { useAppDispatch, useAppSelector } from "../store/storeHooks"
+import { useAppDispatch, useAppSelector } from "../../store/storeHooks"
 import Image from 'next/image'
 import './cartStyle.css'
 import Link from 'next/link'; 
 import { useEffect } from "react";
-import { selectTotalCartPrice, setCart } from "../store/slices/cartSlice";
-import { useCartActions } from "../hooks/useCartActions";
+import { selectTotalCartPrice, setCart } from "../../store/slices/cartSlice";
+import { useCartActions } from "../../hooks/useCartActions";
 
 export default function CartPage() {
     const dispatch = useAppDispatch()

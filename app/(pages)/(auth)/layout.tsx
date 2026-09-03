@@ -1,11 +1,11 @@
-'use client'
+import Image from "next/image";
+import './style.css'
 
-import Image from 'next/image'
-import LoginForm from '../components/LoginForm/LoginForm'
-import './loginStyle.css'
-
-export default function LoginPage() {
-
+export default function AuthLayout({
+    children,
+    }: {
+    children: React.ReactNode;
+    }) {
     return (
         <main className="auth-page-wrapper">  
             <div className="auth-background">
@@ -13,9 +13,10 @@ export default function LoginPage() {
                     src="/images/background/pattern.jpg" 
                     fill
                     sizes="100vw" 
-                    alt="Background pattern" />
+                    alt="Background pattern" 
+                />
             </div>
-            <LoginForm />
-        </main>    
-    )
+            {children}
+        </main>
+    );
 }

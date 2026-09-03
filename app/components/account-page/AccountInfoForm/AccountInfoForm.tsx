@@ -5,7 +5,7 @@ import './AccountInfoFormStyle.css'
 import { useAppDispatch, useAppSelector } from '@/app/store/storeHooks';
 import { clearUserProfile, updateUserFields } from '@/app/store/slices/userSlice';
 import { useActionState, useEffect } from 'react';
-import { validateAndSaveProfileAction } from '@/app/account/[id]/actions';
+import { validateAndSaveProfileAction } from '@/app/(pages)/account/[id]/actions';
 
 const initialState = {
     success: false,

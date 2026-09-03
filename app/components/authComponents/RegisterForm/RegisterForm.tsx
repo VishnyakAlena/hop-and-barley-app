@@ -5,7 +5,7 @@ import { useActionState, useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/app/store/storeHooks';
 import { registerNewUser } from '@/app/store/slices/userSlice';
-import { validateRegisterAction, RegisterActionResponse } from '@/app/register/actions';
+import { validateRegisterAction, RegisterActionResponse } from '@/app/(pages)/(auth)/register/actions';
 import { IUserMock } from '@/app/types';
 import { useRouter } from 'next/navigation';
 
