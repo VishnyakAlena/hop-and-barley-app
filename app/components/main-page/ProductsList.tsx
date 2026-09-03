@@ -1,4 +1,4 @@
-import { Iproduct, IProductsAllInfoResponse } from "@/app/types";
+import { Iproduct } from "@/app/types";
 import Product from "./ProductCard";
 import './ProductsListStyle.css'
 

@@ -1,4 +1,4 @@
-import { productsAllInfo } from '@/app/db/ProductsDB';
+import { productsWitoutUsersofReviews } from '@/app/db/ProductsDB';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -8,7 +8,7 @@ export async function GET(
     try {
         const { id } = await params
         const productInfoId = parseInt(id, 10);
-        const productInfo = productsAllInfo.find(t => t.id === productInfoId);
+        const productInfo = productsWitoutUsersofReviews.find(t => t.id === productInfoId);
 
         if (!productInfo) {
             return NextResponse.json({ error: 'Product not found' }, { status: 404 });

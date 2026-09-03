@@ -1,14 +1,16 @@
 "use client"
 
-import { signIn, useSession } from "next-auth/react"
 import Image from "next/image"
-
 import './headerStyle.css'
 import Link from 'next/link'; 
 import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/store/storeHooks";
+import { initUsersDB, setUserProfile } from "@/app/store/slices/userSlice";
+import { usersAllInfo } from "@/app/db/UsersDB";
+import { useSession } from "next-auth/react";
+
 
 export default function Header() {
-    const { data: session } = useSession()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [wasOpened, setWasOpened] = useState(false); 
 
@@ -69,6 +71,23 @@ export default function Header() {
         isMenuOpen ? 'active' : (wasOpened ? 'closing' : '')
     }`;
 
+    const dispatch = useAppDispatch();
+    const { data: session } = useSession();
+
+    // 2. Объявляем новые переменные авторизации взамен Redux
+    const { isAuth, currentUser } = useAppSelector((state) => state.user); 
+    // Оставляем ТОЛЬКО первичную загрузку моков базы данных при старте сайта
+    useEffect(() => {
+        dispatch(initUsersDB(usersAllInfo));
+    }, [dispatch]);
+
+    if (session?.user?.email && !isAuth) {
+            dispatch(setUserProfile({
+                name: session.user.name || 'User',
+                email: session.user.email,
+                image: session.user.image || '/images/icons/User_alt.svg'
+            }));
+        }
 
     return (
         <header>
@@ -129,11 +148,11 @@ export default function Header() {
                             </div>
                         )}
 
-                        {session?.user ? (
+                        {isAuth && currentUser ? (
                             <div className="header__user-actions header__auth-user " id="auth-user">
                                 {/* Иконка профиля */}
-                                <Link href="/account" className="user-icon" aria-label="My Account">
-                                    <Image src="/images/icons/User_alt.svg" width={32} height={32} alt="User Account" />
+                                <Link href={`/account/${currentUser.id}`} className="user-icon" aria-label="My Account">
+                                    <Image src={currentUser.image || "/images/icons/User_alt.svg"} width={32} height={32} alt="User Account" />
                                 </Link>
                                 
                                 {/* Иконка корзины */}
@@ -143,15 +162,18 @@ export default function Header() {
                             </div>
                         ) :  <div className="header__auth-buttons" id="auth-guest">
                                 {/* Кнопка входа по клику вызывает signIn без создания отдельных компонентов */}
-                                <button 
-                                    onClick={() => signIn('github')} 
+                                <Link 
+                                    href="/login"
                                     className="button button--secondary "
                                 >
                                     Sign in
-                                </button>
+                                </Link>
                                 
                                 {/* Ссылка на регистрацию из вашего шаблона */}
-                                <Link href="/register" className="button button--primary">
+                                <Link 
+                                    href="/register" 
+                                    className="button button--primary"
+                                >
                                     Register
                                 </Link>
                             </div>

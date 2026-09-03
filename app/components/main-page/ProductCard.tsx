@@ -8,7 +8,7 @@ type PropsType = {
 }
 
 function Product({product}:PropsType) {
-
+    
     return (
         <Link
             href={`/product/${product.id}`}

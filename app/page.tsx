@@ -2,16 +2,16 @@
 
 import Image from "next/image";
 import ProductsList from "./components/main-page/ProductsList";
-import { useEffect, useState } from "react";
-import { productsAllInfo } from "./db/ProductsDB";
 import Link from 'next/link'; 
-import { Iproduct } from "./types";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { allProductsInfo } from "./store/slices/productSlice";
 
 export default function Home() {
-    const [allProducts, setAllProducts] = useState<Iproduct[]>([]);
     const router = useRouter();
     const searchParams = useSearchParams();
+
+    const allProducts = useSelector(allProductsInfo);
 
     // 🌟 2. Получаем номер страницы из URL (например, ?page=2). 
     // Если параметра в адресе нет, по умолчанию ставим 1
@@ -19,17 +19,10 @@ export default function Home() {
     const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
     const itemsPerPage = 12; 
 
-    useEffect(() => {
-        fetch('http://localhost:3000/api/productsAllInfo')
-            .then(res => res.json())
-            .then(data => setAllProducts(data.products || data)) // В зависимости от структуры ответа вашего API
-            .catch(err => console.error(err));
-    }, []);
-
     const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
     const indexOfLastItem = indexOfFirstItem + itemsPerPage;
-    const currentProducts = productsAllInfo.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(productsAllInfo.length / itemsPerPage);
+    const currentProducts = allProducts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(allProducts.length / itemsPerPage);
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
@@ -97,14 +90,14 @@ export default function Home() {
                         <div className="search-wrapper">
                             <div className="menu-icon-wrapper">
                                 <svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 6H16M1 1H16M1 11H16" stroke="#F5F5F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M1 6H16M1 1H16M1 11H16" stroke="#F5F5F5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </div>
                             <div className="search-input-wrapper">
                             <input type="text" placeholder="Search" className="search-input" />
                             <button className="search-button" aria-label="Search">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.8 12.8L9.90005 9.9M11.4667 6.13334C11.4667 9.07886 9.0789 11.4667 6.13338 11.4667C3.18786 11.4667 0.800049 9.07886 0.800049 6.13334C0.800049 3.18782 3.18786 0.800003 6.13338 0.800003C9.0789 0.800003 11.4667 3.18782 11.4667 6.13334Z" stroke="#111D13" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12.8 12.8L9.90005 9.9M11.4667 6.13334C11.4667 9.07886 9.0789 11.4667 6.13338 11.4667C3.18786 11.4667 0.800049 9.07886 0.800049 6.13334C0.800049 3.18782 3.18786 0.800003 6.13338 0.800003C9.0789 0.800003 11.4667 3.18782 11.4667 6.13334Z" stroke="#111D13" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                             </button>
                         </div>

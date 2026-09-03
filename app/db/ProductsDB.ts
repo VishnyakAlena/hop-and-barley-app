@@ -1,6 +1,4 @@
-import { usersAllInfo } from "./UsersDB";
-
-const productsWitoutUsersofReviews = [
+export const productsWitoutUsersofReviews = [
     { 
         id: 1, 
         name: 'Citra Hops',
@@ -1288,20 +1286,3 @@ const productsWitoutUsersofReviews = [
 ];
 
 
-export const productsAllInfo = productsWitoutUsersofReviews.map(product => {
-    return {
-        ...product,
-        // Пересобираем отзывы внутри каждого товара
-        latestReviews: product.latestReviews?.map(review => {
-            // Ищем пользователя в базе по его ID (приводим к строке для безопасности)
-            const user = usersAllInfo.find(u => String(u.id) === String(review.userId));
-            
-            return {
-                ...review,
-                // Автоматически подставляем имя и фото, если пользователь найден
-                userName: user ? user.name : "Anonymous User",
-                userImage: user ? user.image : "/images/avatars/default-avatar.png"
-            };
-        })
-    };
-});
