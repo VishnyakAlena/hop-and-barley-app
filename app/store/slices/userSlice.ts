@@ -116,7 +116,10 @@ export const userSlice = createSlice({
 
         addOrderToHistory: (state, action: PayloadAction<IOrder>) => {
             if (state.currentUser) {
-                state.currentUser.orders?.push(action.payload);
+                if (!state.currentUser.orders) {
+                    state.currentUser.orders = [];
+                }
+                state.currentUser.orders.push(action.payload);
                 const dbUserIndex = state.users.findIndex(u => u.email === state.currentUser?.email);
                 if (dbUserIndex !== -1) {
                     state.users[dbUserIndex].orders = state.currentUser.orders;
@@ -127,6 +130,37 @@ export const userSlice = createSlice({
             }
         },
 
+        updateOrderStatus: (
+            state, 
+            action: PayloadAction<{ email: string; orderNumber: number; newStatus: IOrder['status'] }>
+        ) => {
+            const { email, orderNumber, newStatus } = action.payload;
+
+            // 1. Обновляем статус в общей базе всех пользователей Redux
+            const userInDb = state.users.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+            if (userInDb && userInDb.orders) {
+                const order = userInDb.orders.find(o => o.number === orderNumber);
+                if (order) {
+                    order.status = newStatus;
+                }
+            }
+
+            // 2. Обновляем статус у текущего активного пользователя на экране
+            if (state.currentUser && state.currentUser.email.toLowerCase() === email.toLowerCase().trim()) {
+                if (state.currentUser.orders) {
+                    const order = state.currentUser.orders.find(o => o.number === orderNumber);
+                    if (order) {
+                        order.status = newStatus;
+                    }
+                }
+            }
+
+            // 3. Железобетонно синхронизируем изменения с локальной памятью браузера
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('mock_users_db', JSON.stringify(state.users));
+            }
+        },
+
         clearUserProfile: (state) => {
             state.currentUser = null;
             state.isAuth = false;
@@ -134,5 +168,5 @@ export const userSlice = createSlice({
     }
 });
 
-export const { initUsersDB, registerNewUser, updateUserPassword, setUserProfile, updateUserFields, addOrderToHistory, clearUserProfile } = userSlice.actions;
+export const { initUsersDB, registerNewUser, updateUserPassword, setUserProfile, updateUserFields, addOrderToHistory, updateOrderStatus, clearUserProfile } = userSlice.actions;
 export default userSlice.reducer;

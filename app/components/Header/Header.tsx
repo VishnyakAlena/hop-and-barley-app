@@ -5,9 +5,10 @@ import './headerStyle.css'
 import Link from 'next/link'; 
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/store/storeHooks";
-import { initUsersDB, setUserProfile } from "@/app/store/slices/userSlice";
+import { initUsersDB, setUserProfile, updateOrderStatus } from "@/app/store/slices/userSlice";
 import { usersAllInfo } from "@/app/db/UsersDB";
 import { useSession } from "next-auth/react";
+import { setCart } from "@/app/store/slices/cartSlice";
 
 
 export default function Header() {
@@ -81,20 +82,82 @@ export default function Header() {
         dispatch(initUsersDB(usersAllInfo));
     }, [dispatch]);
 
-    if (session?.user?.email && !isAuth) {
-            dispatch(setUserProfile({
-                name: session.user.name || 'User',
-                email: session.user.email,
-                image: session.user.image || '/images/icons/User_alt.svg'
-            }));
-        }
+    useEffect(() => {
+        // Метка времени ?t=... заставляет браузер делать честный запрос к серверу
+        fetch(`/api/cart?t=${Date.now()}`)
+            .then((res) => res.json())
+            .then((data) => {
+                dispatch(setCart(data));
+            })
+            .catch((err) => console.error("Header cart fetch error:", err));
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (session?.user?.email && !isAuth) {
+                dispatch(setUserProfile({
+                    name: session.user.name || 'User',
+                    email: session.user.email,
+                    image: session.user.image || '/images/icons/User_alt.svg'
+                }));
+            }
+    }, [session, isAuth, dispatch]); 
+
+    useEffect(() => {
+        // Если пользователь не вошел или у него нет заказов — ничего не делаем
+        if (!currentUser || !currentUser.orders || currentUser.orders.length === 0) return;
+
+        const checkAndUpgradeStatuses = () => {
+            const now = Date.now(); // Текущее время в миллисекундах
+
+            currentUser.orders?.forEach((order) => {
+                const orderTime = new Date(order.date).getTime(); // Время создания заказа
+                const minutesPassed = (now - orderTime) / 1000 / 60; // Переводим разницу в минуты
+
+                // 🔄 ЦЕПОЧКА СМЕНЫ СТАТУСОВ:
+                // 1. Прошла 1 минута -> Переводим из Pending в Confirmed
+                if (minutesPassed >= 1 && minutesPassed < 3 && order.status === 'Pending') {
+                    dispatch(updateOrderStatus({
+                        email: currentUser.email,
+                        orderNumber: order.number,
+                        newStatus: 'Confirmed'
+                    }));
+                }
+
+                // 2. Прошло 3 минуты -> Переводим из Confirmed в Shipped
+                if (minutesPassed >= 3 && minutesPassed < 5 && order.status === 'Confirmed') {
+                    dispatch(updateOrderStatus({
+                        email: currentUser.email,
+                        orderNumber: order.number,
+                        newStatus: 'Shipped'
+                    }));
+                }
+
+                // 3. Прошло 5 минут -> Переводим в финальный статус Delivered
+                if (minutesPassed >= 5 && order.status !== 'Delivered') {
+                    dispatch(updateOrderStatus({
+                        email: currentUser.email,
+                        orderNumber: order.number,
+                        newStatus: 'Delivered'
+                    }));
+                }
+            });
+        };
+
+        // Запускаем проверку сразу при монтировании шапки
+        checkAndUpgradeStatuses();
+
+        // Каждые 10 секунд проверяем время заново
+        const interval = setInterval(checkAndUpgradeStatuses, 10000);
+
+        return () => clearInterval(interval); // Чистим таймер при уходе со страницы
+    }, [currentUser, dispatch]);
 
     return (
         <header>
             <div className="container">
                 <section className="header-container">
                     <div className="header__logo">
-                        <Image src="/images/logo.svg" width={26} height={37} alt="Hop & Barley Logo"/>
+                        <Image src="/images/logo.svg" width={26} height={37} alt="Hop & Barley Logo" style={{ height: 'auto', width: 'auto' }}/>
                         <p className="logo-text">Hop & Barley</p>
                     </div>
                     <div className="header__nav-and-auth">

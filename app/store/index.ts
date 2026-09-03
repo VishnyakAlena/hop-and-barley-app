@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import cartSlice from './slices/cartSlice';
 import userSlice from "./slices/userSlice";
+import orderSlice from "./slices/orderSlice";
 
 // 1. Создаем функцию для изоляции хранилища под каждый запрос/клиент
 export const makeStore = () => {
     return configureStore({
         reducer: {
             cart: cartSlice,
-            user: userSlice
+            user: userSlice,
+            order: orderSlice,
         }
     });
 };

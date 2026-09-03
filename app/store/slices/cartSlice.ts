@@ -19,11 +19,13 @@ const cartSlice = createSlice({
     reducers: {
         setCart: (state, action: PayloadAction<ICartProduct[]>) => {
             state.products = action.payload;
+            state.total = action.payload.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
         },
         
         // Экшен для полной очистки корзины (понадобится после успешного оформления заказа)
         clearCart: (state) => {
             state.products = [];
+            state.total = 0;
         }
     }
 })

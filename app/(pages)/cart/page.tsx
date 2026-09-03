@@ -4,28 +4,57 @@ import { useAppDispatch, useAppSelector } from "../../store/storeHooks"
 import Image from 'next/image'
 import './cartStyle.css'
 import Link from 'next/link'; 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { selectTotalCartPrice, setCart } from "../../store/slices/cartSlice";
 import { useCartActions } from "../../hooks/useCartActions";
+import { useRouter } from 'next/navigation'; 
 
 export default function CartPage() {
     const dispatch = useAppDispatch()
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
     const { products } = useAppSelector((state) => state.cart)
     const { addToCart, removeFromCart, clearProductFromCart } = useCartActions();
     useEffect(() => {
         fetch('/api/cart')
             .then(res => res.json())
-            .then(data => dispatch(setCart(data)))
-            .catch(err => console.error(err));
+            .then(data => {
+                dispatch(setCart(data));
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch cart data:", err);
+                setIsLoading(false);
+            });
     }, [dispatch])
 
     const totalCartPrice = useAppSelector(selectTotalCartPrice);
 
-    if (products.length === 0) {
+    const handleProceedToCheckout = () => {
+        if (products.length === 0) {
+            return;
+        }
+        router.push("/checkout");
+    };
+
+    if (isLoading) {
+        return (
+            <main className="cart-page-wrapper">
+                <div className="cart-container text-center py-12">
+                    <h2 className="cart-title text-gray-500">Loading your cart...</h2>
+                </div>
+            </main>
+        );
+    }
+
+    if (!products || products.length === 0) {
         return (
             <main className="cart-page-wrapper">
                 <div className="cart-container">
                     <h2 className="cart-title cart-empty">Your cart is empty</h2>
+                    <Link href="/" className="button button--primary py-2 px-6 rounded-lg">
+                        Go to Catalog
+                    </Link>
                 </div>;
             </main>
         )
@@ -37,7 +66,6 @@ export default function CartPage() {
                 <h1 className="cart-title">Shopping Cart</h1>
                     <div className="cart-items-list">
                         {products.map(item => <div className="cart-item">
-                            <div></div>
                             <Image 
                                 src={item.product.image} 
                                 alt={item.product.name} 
@@ -86,7 +114,13 @@ export default function CartPage() {
                                 <p>Total price:</p>
                                 <p>${totalCartPrice.toFixed(2)}</p>
                             </div>
-                            <Link href="/checkout" className="button button--primary button--checkout">Proceed to Checkout</Link>
+                            <button 
+                                type="button" 
+                                onClick={handleProceedToCheckout}  
+                                className="button button--primary button--checkout"
+                            >
+                                Proceed to Checkout
+                            </button>
                         </div>
                     </div>
                 

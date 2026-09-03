@@ -1,14 +1,8 @@
 "use server";
 
-import { z } from 'zod';
+import { profileSchema } from "@/app/schemas/schemas";
 
-// Описываем правила валидации полей профиля через Zod
-const profileSchema = z.object({
-    full_name: z.string().min(2, "Name must be at least 2 characters long"),
-    phone: z.string().regex(/^\+?[0-9]{10,15}$/, "Invalid phone format (e.g. +375291234567)"),
-    city: z.string().min(2, "City name is too short"),
-    address: z.string().min(5, "Address must be at least 5 characters long")
-});
+
 
 export interface ProfileActionResponse {
     success: boolean;

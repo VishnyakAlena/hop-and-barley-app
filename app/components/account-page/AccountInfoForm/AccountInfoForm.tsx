@@ -28,8 +28,6 @@ export default function AccountInfoForm() {
                 city: state.data.city,
                 address: state.data.address
             }));
-                
-            alert("Profile changes saved successfully!");
         }
 }, [state.success, state.data, dispatch]);
 

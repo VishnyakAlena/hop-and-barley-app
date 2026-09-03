@@ -53,6 +53,8 @@ export interface IOrder {
     date: string;
     status: 'Pending' | 'Shipped' | 'Delivered' | 'Confirmed';
     items: ICartProduct[];
+    totalPrice: number, 
+    paymentMethod: string 
 }
 
 

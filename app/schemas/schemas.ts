@@ -1,5 +1,21 @@
 import { z } from 'zod';
 
+export const profileSchema = z.object({
+    full_name: z.string().min(2, "Name must be at least 2 characters long"),
+    phone: z
+        .string()
+        .regex(/^\+?[0-9]{10,15}$/, "Invalid phone format (e.g. +375291234567)")
+        .or(z.literal("")),
+    city: z
+        .string()
+        .min(2, "City name is too short")
+        .or(z.literal("")),
+    address: z
+        .string()
+        .min(5, "Address must be at least 5 characters long")
+        .or(z.literal("")),
+});
+
 export const registerSchema = z.object({
     email: z
         .string()
