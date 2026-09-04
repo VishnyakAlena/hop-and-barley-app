@@ -195,12 +195,6 @@
     transform: rotate(180deg);
 }
 
-
-
-
-
-
-
 @media (max-width: 768px) {
     .product-details-section {
         flex-direction: column; 

@@ -11,6 +11,9 @@ export const productsWitoutUsersofReviews = [
             'Citra boasts a high alpha acid content, making it excellent for both bitterness and intense aroma. It imparts notes of grapefruit, lime, passion fruit, lychee, and melon to beer, creating a unique tropical bouquet.',
             'Our T-90 pellets are hermetically sealed to preserve freshness and maximum aromatics.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Aroma (Dual-Purpose)'},
@@ -56,6 +59,9 @@ export const productsWitoutUsersofReviews = [
             'It provides a rich, slightly sweet, and biscuity malt backbone that is more complex than standard 2-row malts, with subtle nutty undertones that enhance any beer style. Perfect for creating authentic British ales such as Bitters, IPAs, Porters, and Stouts.',
             'Its excellent processing characteristics and high extract yield make it a reliable and efficient choice for both novice and experienced brewers.'
         ],
+        category: 'malts',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'United Kingdom'},
             {label: 'Type', value: 'Base Malt'},
@@ -102,6 +108,9 @@ export const productsWitoutUsersofReviews = [
             'With its high attenuation and high flocculation, US-05 is ideal for a wide range of American ale styles, from West Coast IPAs to American Pale Ales and Cream Ales. It forms a firm sediment, making racking and clarification easier.',
             'Reliable, easy to use, and available in a dry format, this yeast is the number one choice for brewers seeking consistent and predictable results.'
         ],
+        category: 'yeast',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dry Ale Yeast'},
@@ -148,6 +157,9 @@ export const productsWitoutUsersofReviews = [
             'Its moderate bitterness and vibrant aroma, with notes of grapefruit, orange, and light floral undertones, make it incredibly versatile. Cascade is excellent for both bittering and late kettle additions or for dry hopping.',
             'This hop is a reliable choice for brewers looking to create a refreshing, balanced, and recognizable ale.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Aroma (Dual-Purpose)'},
@@ -194,6 +206,9 @@ export const productsWitoutUsersofReviews = [
             'The flavor of this malt is characterized by distinct notes of caramel, toffee, and light hints of toasted bread. It adds a pleasant sweetness to the beer that beautifully balances hop bitterness and also contributes to improved head retention.',
             'Caramel Malt 60L is ideal for a wide range of styles, from Pale Ales and Amber Ales to Porters and Stouts, adding complexity and depth.'
         ],
+        category: 'malts',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA / Belgium'},
             {label: 'Type', value: 'Crystal/Caramel Malt'},
@@ -240,6 +255,9 @@ export const productsWitoutUsersofReviews = [
             'Its aroma is characterized by soft, spicy, herbal, and floral notes. Saaz is primarily used for aroma rather than bitterness, as its alpha acid content is low. It imparts a classic European elegance and clean taste to the beer.',
             'If you aim to brew an authentic Czech pilsner, European lager, or Belgian ale, Saaz is an indispensable ingredient.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'Czech Republic'},
             {label: 'Type', value: 'Aroma'},
@@ -286,6 +304,9 @@ export const productsWitoutUsersofReviews = [
             'This malt imparts a very light, straw-like color and a clean, slightly sweet, grainy flavor to the beer. Its neutral character allows the aroma of hops and the work of the yeast to fully express themselves, making it an ideal base for beers where purity and crispness are paramount.',
             'Thanks to its high enzymatic activity, Pilsner Malt is excellent for mashes with a large proportion of unmalted grains'
         ],
+        category: 'malts',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'Germany / Belgium'},
             {label: 'Type', value: 'Base Malt'},
@@ -333,6 +354,9 @@ export const productsWitoutUsersofReviews = [
             `"Flagship" provides a clean fermentation with light ester notes of citrus and stone fruit that complement, rather than overpower, the hop and malt profile. It has good attenuation and moderate flocculation, leaving behind a soft and smooth mouthfeel.`,
             'Thanks to the high cell count per package (200 billion), this yeast does not require a starter for most standard batches of beer, making it a convenient and reliable choice.'
         ],
+        category: 'yeast',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Strain Type', value: 'Ale'},
             {label: 'Flocculation', value: 'Medium'},
@@ -379,6 +403,9 @@ export const productsWitoutUsersofReviews = [
             `The aroma of Centennial is powerful, with bright notes of lemon, grapefruit, and pronounced floral undertones. Unlike Cascade, it is less spicy and more "clean" in its citrus expression. Thanks to its high alpha acid content, it is excellent for both bittering and creating an intense aroma.`,
             'This is an extremely versatile hop, perfect for American Pale Ales, IPAs, and Double IPAs, giving them a bright and recognizable character.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dual-Purpose'},
@@ -425,6 +452,9 @@ export const productsWitoutUsersofReviews = [
             'Citra boasts a high alpha acid content, making it excellent for both bitterness and intense aroma. It imparts notes of grapefruit, lime, passion fruit, lychee, and melon to beer, creating a unique tropical bouquet.',
             'Our T-90 pellets are hermetically sealed to preserve freshness and maximum aromatics.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Aroma (Dual-Purpose)'},
@@ -470,6 +500,9 @@ export const productsWitoutUsersofReviews = [
             `The aroma of Centennial is powerful, with bright notes of lemon, grapefruit, and pronounced floral undertones. Unlike Cascade, it is less spicy and more "clean" in its citrus expression. Thanks to its high alpha acid content, it is excellent for both bittering and creating an intense aroma.`,
             'This is an extremely versatile hop, perfect for American Pale Ales, IPAs, and Double IPAs, giving them a bright and recognizable character.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dual-Purpose'},
@@ -516,6 +549,9 @@ export const productsWitoutUsersofReviews = [
             `Using unmalted wheat provides the beer with its characteristic light haze, a smooth, silky body, and a subtle, bready-grainy flavor that doesn't overpower the delicate notes of coriander and orange peel. The high protein content of this grain also contributes to a dense and persistent head.`,
             'This ingredient is a must-have for any brewer aiming to recreate an authentic Belgian Witbier or to add complexity and body to other styles, such as Lambics.'
         ],
+        category: 'wheat',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'Belgium / USA'},
             {label: 'Type', value: 'Unmalted Adjunct'},
@@ -562,6 +598,9 @@ export const productsWitoutUsersofReviews = [
             `The name "Mosaic" is fully justified: it creates a complex mosaic of flavors and aromas, including notes of tropical fruits (mango, guava), citrus (tangerine), berries (blueberry), stone fruits (peach), and even light pine and earthy undertones.`,
             'This hop is ideal for dry hopping in IPA and Pale Ale styles, where it can unleash its full potential, creating a juicy, vibrant, and unforgettable beer.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dual-Purpose'},
@@ -608,6 +647,9 @@ export const productsWitoutUsersofReviews = [
             `We've selected the perfect combination of malts to achieve a clean, dry body that serves as an excellent base for a hop explosion. The kit includes a powerful combination of Centennial, Simcoe, and Columbus hops, which provide a burst of citrus, pine, and resinous notes characteristic of this style.`,
             'This kit is your ticket to the world of true West Coast IPA. It comes with detailed step-by-step instructions to guide you through every stage, from mashing to bottling.'
         ],
+        category: 'kits',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Kit Type', value: 'All-Grain'},
             {label: 'Batch Size', value: '5 Gallons (19 Liters)'},
@@ -653,6 +695,9 @@ export const productsWitoutUsersofReviews = [
             'Citra boasts a high alpha acid content, making it excellent for both bitterness and intense aroma. It imparts notes of grapefruit, lime, passion fruit, lychee, and melon to beer, creating a unique tropical bouquet.',
             'Our T-90 pellets are hermetically sealed to preserve freshness and maximum aromatics.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Aroma (Dual-Purpose)'},
@@ -698,6 +743,9 @@ export const productsWitoutUsersofReviews = [
             'It provides a rich, slightly sweet, and biscuity malt backbone that is more complex than standard 2-row malts, with subtle nutty undertones that enhance any beer style. Perfect for creating authentic British ales such as Bitters, IPAs, Porters, and Stouts.',
             'Its excellent processing characteristics and high extract yield make it a reliable and efficient choice for both novice and experienced brewers.'
         ],
+        category: 'malts',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'United Kingdom'},
             {label: 'Type', value: 'Base Malt'},
@@ -744,6 +792,9 @@ export const productsWitoutUsersofReviews = [
             'With its high attenuation and high flocculation, US-05 is ideal for a wide range of American ale styles, from West Coast IPAs to American Pale Ales and Cream Ales. It forms a firm sediment, making racking and clarification easier.',
             'Reliable, easy to use, and available in a dry format, this yeast is the number one choice for brewers seeking consistent and predictable results.'
         ],
+        category: 'yeast',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dry Ale Yeast'},
@@ -790,6 +841,9 @@ export const productsWitoutUsersofReviews = [
             'Its moderate bitterness and vibrant aroma, with notes of grapefruit, orange, and light floral undertones, make it incredibly versatile. Cascade is excellent for both bittering and late kettle additions or for dry hopping.',
             'This hop is a reliable choice for brewers looking to create a refreshing, balanced, and recognizable ale.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Aroma (Dual-Purpose)'},
@@ -836,6 +890,9 @@ export const productsWitoutUsersofReviews = [
             'The flavor of this malt is characterized by distinct notes of caramel, toffee, and light hints of toasted bread. It adds a pleasant sweetness to the beer that beautifully balances hop bitterness and also contributes to improved head retention.',
             'Caramel Malt 60L is ideal for a wide range of styles, from Pale Ales and Amber Ales to Porters and Stouts, adding complexity and depth.'
         ],
+        category: 'malts',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA / Belgium'},
             {label: 'Type', value: 'Crystal/Caramel Malt'},
@@ -882,6 +939,9 @@ export const productsWitoutUsersofReviews = [
             'Its aroma is characterized by soft, spicy, herbal, and floral notes. Saaz is primarily used for aroma rather than bitterness, as its alpha acid content is low. It imparts a classic European elegance and clean taste to the beer.',
             'If you aim to brew an authentic Czech pilsner, European lager, or Belgian ale, Saaz is an indispensable ingredient.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'Czech Republic'},
             {label: 'Type', value: 'Aroma'},
@@ -928,6 +988,9 @@ export const productsWitoutUsersofReviews = [
             'This malt imparts a very light, straw-like color and a clean, slightly sweet, grainy flavor to the beer. Its neutral character allows the aroma of hops and the work of the yeast to fully express themselves, making it an ideal base for beers where purity and crispness are paramount.',
             'Thanks to its high enzymatic activity, Pilsner Malt is excellent for mashes with a large proportion of unmalted grains'
         ],
+        category: 'malts',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'Germany / Belgium'},
             {label: 'Type', value: 'Base Malt'},
@@ -975,6 +1038,9 @@ export const productsWitoutUsersofReviews = [
             `"Flagship" provides a clean fermentation with light ester notes of citrus and stone fruit that complement, rather than overpower, the hop and malt profile. It has good attenuation and moderate flocculation, leaving behind a soft and smooth mouthfeel.`,
             'Thanks to the high cell count per package (200 billion), this yeast does not require a starter for most standard batches of beer, making it a convenient and reliable choice.'
         ],
+        category: 'yeast',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Strain Type', value: 'Ale'},
             {label: 'Flocculation', value: 'Medium'},
@@ -1021,6 +1087,9 @@ export const productsWitoutUsersofReviews = [
             `The aroma of Centennial is powerful, with bright notes of lemon, grapefruit, and pronounced floral undertones. Unlike Cascade, it is less spicy and more "clean" in its citrus expression. Thanks to its high alpha acid content, it is excellent for both bittering and creating an intense aroma.`,
             'This is an extremely versatile hop, perfect for American Pale Ales, IPAs, and Double IPAs, giving them a bright and recognizable character.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dual-Purpose'},
@@ -1067,6 +1136,9 @@ export const productsWitoutUsersofReviews = [
             'Citra boasts a high alpha acid content, making it excellent for both bitterness and intense aroma. It imparts notes of grapefruit, lime, passion fruit, lychee, and melon to beer, creating a unique tropical bouquet.',
             'Our T-90 pellets are hermetically sealed to preserve freshness and maximum aromatics.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Aroma (Dual-Purpose)'},
@@ -1112,6 +1184,9 @@ export const productsWitoutUsersofReviews = [
             `The aroma of Centennial is powerful, with bright notes of lemon, grapefruit, and pronounced floral undertones. Unlike Cascade, it is less spicy and more "clean" in its citrus expression. Thanks to its high alpha acid content, it is excellent for both bittering and creating an intense aroma.`,
             'This is an extremely versatile hop, perfect for American Pale Ales, IPAs, and Double IPAs, giving them a bright and recognizable character.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dual-Purpose'},
@@ -1158,6 +1233,9 @@ export const productsWitoutUsersofReviews = [
             `Using unmalted wheat provides the beer with its characteristic light haze, a smooth, silky body, and a subtle, bready-grainy flavor that doesn't overpower the delicate notes of coriander and orange peel. The high protein content of this grain also contributes to a dense and persistent head.`,
             'This ingredient is a must-have for any brewer aiming to recreate an authentic Belgian Witbier or to add complexity and body to other styles, such as Lambics.'
         ],
+        category: 'wheat',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'Belgium / USA'},
             {label: 'Type', value: 'Unmalted Adjunct'},
@@ -1204,6 +1282,9 @@ export const productsWitoutUsersofReviews = [
             `The name "Mosaic" is fully justified: it creates a complex mosaic of flavors and aromas, including notes of tropical fruits (mango, guava), citrus (tangerine), berries (blueberry), stone fruits (peach), and even light pine and earthy undertones.`,
             'This hop is ideal for dry hopping in IPA and Pale Ale styles, where it can unleash its full potential, creating a juicy, vibrant, and unforgettable beer.'
         ],
+        category: 'hops',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Origin', value: 'USA'},
             {label: 'Type', value: 'Dual-Purpose'},
@@ -1250,6 +1331,9 @@ export const productsWitoutUsersofReviews = [
             `We've selected the perfect combination of malts to achieve a clean, dry body that serves as an excellent base for a hop explosion. The kit includes a powerful combination of Centennial, Simcoe, and Columbus hops, which provide a burst of citrus, pine, and resinous notes characteristic of this style.`,
             'This kit is your ticket to the world of true West Coast IPA. It comes with detailed step-by-step instructions to guide you through every stage, from mashing to bottling.'
         ],
+        category: 'kits',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-09-04',
         technicalSpecifications: [
             {label: 'Kit Type', value: 'All-Grain'},
             {label: 'Batch Size', value: '5 Gallons (19 Liters)'},

@@ -22,7 +22,10 @@ export interface Iproduct {
     description: string[],
     image: string,
     technicalSpecifications: ISpecificationsItem[],
-    latestReviews?: IReviewFull[]
+    latestReviews?: IReviewFull[],
+    category: string,
+    createdAt: string,
+    updatedAt: string;
 }
 
 export interface ICartProduct {
