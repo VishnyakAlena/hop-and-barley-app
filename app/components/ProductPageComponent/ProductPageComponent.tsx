@@ -101,7 +101,7 @@ function ProductPageComponent({product}:PropsType) {
                                 )}
                             </div>
                         </section>
-                        <section className="reviews-section container">
+                        <section className="reviews-section">
                             <h2 className="reviews-title">Latest reviews</h2>
                             <div className="reviews-grid">
                                 {reviews.map((review: IReviewFull) => (
