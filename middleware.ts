@@ -13,6 +13,7 @@ export const config = {
     // Страницы, которые защищает этот мидлварь
     matcher: [
         "/cart",
-        "/account/[id]"
+        "/checkout/:path*",
+        "/account/:path*"
     ],
 };

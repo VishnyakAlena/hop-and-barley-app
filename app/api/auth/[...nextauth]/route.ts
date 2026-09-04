@@ -54,6 +54,9 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GITHUB_SECRET || ''
         }),
     ],
+    pages: {
+        signIn: '/login', // Говорит NextAuth: "Моя форма входа лежит по адресу /login"
+    },
     session: {
         strategy: "jwt",
     },
