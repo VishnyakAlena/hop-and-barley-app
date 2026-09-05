@@ -35,7 +35,7 @@ export const userSlice = createSlice({
             }
         },
 
-         registerNewUser: (state, action: PayloadAction<IUserMock>) => {
+        registerNewUser: (state, action: PayloadAction<IUserMock>) => {
             const exists = state.users.some(u => u.email.toLowerCase() === action.payload.email.toLowerCase());
             if (!exists) {
                 state.users.push(action.payload);
@@ -44,7 +44,7 @@ export const userSlice = createSlice({
             }
         },
 
-        setUserProfile: (state, action: PayloadAction<{ id?: number; name: string | string[]; email: string; image: string; password?: string }>) => {
+        setUserProfile: (state, action: PayloadAction<{ id?: number; name: string | string[]; email: string; image: string; password?: string; role?: string }>) => {
             const email = action.payload.email.toLowerCase().trim();
             let existingUser = state.users.find(u => u.email.toLowerCase() === email);
 

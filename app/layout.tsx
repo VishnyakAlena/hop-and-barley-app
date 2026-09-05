@@ -5,6 +5,7 @@ import Header from "./components/Header/Header";
 import Providers from "./components/Providers";
 import StoreProvider from "./store/storeProvider";
 import Footer from "./components/Footer/Footer";
+import DynamicFooter from "./components/Footer/DynamicFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <StoreProvider>
               <Header />
                 {children}
-              <Footer />
+              <DynamicFooter />
             </StoreProvider>
           </Providers>
       </body>

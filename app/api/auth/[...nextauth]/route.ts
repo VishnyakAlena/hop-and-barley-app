@@ -3,6 +3,8 @@ import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+const ADMIN_EMAIL = "vishnyak-elena@mail.ru";
+
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
@@ -41,7 +43,8 @@ export const authOptions: NextAuthOptions = {
                     id: String(foundUser.id),
                     name: foundUser.name, 
                     email: foundUser.email,
-                    image: foundUser.image || '/images/icons/User_alt.svg'
+                    image: foundUser.image || '/images/icons/User_alt.svg',
+                    role: foundUser.role || 'user' 
                 };
             }
         }),
@@ -68,15 +71,44 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
+                
+                // Проверяем админскую почту на сервере (для входа через GitHub/Google)
+                const isMyAdminEmail = user.email?.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim();
+                
+                if (isMyAdminEmail) {
+                    token.role = 'admin';
+                } else {
+                    token.role = (user as any).role || 'user';
+                }
             }
             return token;
         },
         async session({ session, token }) {
             if (session.user && token) {
-                const extendedUser = session.user as { id?: string; name?: string | null; email?: string | null; image?: string | null };
+                const extendedUser = session.user as { 
+                    id?: string; 
+                    name?: string | null; 
+                    email?: string | null; 
+                    image?: string | null;
+                    role?: string; 
+                };
                 extendedUser.id = token.id as string;
+                extendedUser.role = token.role as string;
             }
             return session;
+        },
+        async redirect({ url, baseUrl }) {
+            // NextAuth v4 передает в url ту страницу, с которой пользователь пришел, 
+            // либо относительный путь. Перенаправляем на основе флага или параметров URL.
+            
+            // Если мы уже находимся в процессе перенаправления на админку или аккаунт, не зацикливаем
+            if (url.startsWith(baseUrl)) {
+                return url;
+            } else if (url.startsWith("/")) {
+                return `${baseUrl}${url}`;
+            }
+            
+            return baseUrl;
         }
     }
 };

@@ -1,6 +1,24 @@
 import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
-export default withAuth({
+export default withAuth(
+    function middleware(req) {
+        const token = req.nextauth.token;
+        const pathname = req.nextUrl.pathname;
+
+        // 1. Защита админки: если обычный юзер (не admin) пытается зайти на /admin,
+        //    мы блокируем его и принудительно перенаправляем в личный кабинет /account
+        if (pathname.startsWith("/admin") && token?.role !== "admin") {
+            return NextResponse.redirect(new URL("/account", req.url));
+        }
+
+        // 2. Удобство для админа: если вы вошли под своим GitHub (с ролью admin)
+        //    и попали на страницу /account, вас автоматически перекинет в админку
+        if (pathname.startsWith("/account") && token?.role === "admin") {
+            return NextResponse.redirect(new URL("/admin", req.url));
+        }
+    },
+    {
   // 1. Принудительно передаем секретный ключ. Это защитит от "ошибки сервера"
     secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || "super-secret-fallback-string-32-chars",
     callbacks: {
@@ -14,6 +32,7 @@ export const config = {
     matcher: [
         "/cart",
         "/checkout/:path*",
-        "/account/:path*"
+        "/account/:path*",
+        "/admin/:path*"
     ],
 };

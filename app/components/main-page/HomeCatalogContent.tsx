@@ -47,7 +47,6 @@ export default function HomeCatalogContent() {
         return Array.from(new Set(validCategories)).sort();
     }, [allProducts]);
 
-    // 🌟 ЖИВАЯ ФИЛЬТРАЦИЯ И СОРТИРОВКА ТОВАРОВ
     const filteredAndSortedProducts = useMemo(() => {
         let items = [...allProducts];
 
@@ -125,7 +124,6 @@ export default function HomeCatalogContent() {
     return (
         <div className="container main-content-grid">
             <aside className="sidebar filter-menu">
-                {/* 🌟 БЛОК ДИНАМИЧЕСКИХ КЛЮЧЕВЫХ СЛОВ (Keywords) */}
                 <div className="sidebar__section">
                     <h3 className="section-title">Keywords</h3>
                     <div className="keywords-list">

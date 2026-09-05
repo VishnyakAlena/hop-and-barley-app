@@ -370,6 +370,7 @@ export let usersAllInfo: IUserMock[] = [
         city: '',    
         address: '',
         orders: [], 
+        role: 'admin',
     },
 ]
 

@@ -27,19 +27,28 @@ export default function LoginForm() {
 
     // Синхронизация сессии NextAuth (Google/GitHub или обычная сессия после перезагрузки)
     useEffect(() => {
-        if (session?.user?.email) {
+        if (session?.user?.email && !isAuth) {
+            const ADMIN_EMAIL = "vishnyak-elena@mail.ru";
+            const isMyEmail = session.user.email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim();
+            const sessionRole = isMyEmail ? 'admin' : ((session.user as any).role || 'user');
+
             dispatch(setUserProfile({
                 name: session.user.name || 'User',
                 email: session.user.email,
-                image: session.user.image || '/images/icons/User_alt.svg'
+                image: session.user.image || '/images/icons/User_alt.svg',
+                role: sessionRole 
             }));
         }
-    }, [session, dispatch]);
+    }, [session, isAuth, dispatch]);
 
     // Умный редирект
     useEffect(() => {
-        if (isAuth && currentUser) {
-            router.push(`/account/${currentUser.id}?tab=info`);
+        if (isAuth && currentUser && currentUser.role) {
+            if (currentUser.role === 'admin') {
+                router.push('/admin');
+            } else {
+                router.push(`/account/${currentUser.id}?tab=info`);
+            }
         }
     }, [isAuth, currentUser, router]);
 
@@ -80,24 +89,33 @@ export default function LoginForm() {
             email: inputEmail,
             password: password,
             redirect: false, 
-            usersJson: JSON.stringify(allUsers) 
+            usersJson: JSON.stringify(finalUsersList) 
         });
 
         if (result?.error) {
             setFormErrors({
-            password: "Invalid email or password!"
-        });
+                password: "Invalid email or password!"
+            });
         } else {
+            const ADMIN_EMAIL = "vishnyak-elena@mail.ru";
             const loggedInUser = finalUsersList.find(u => u.email.toLowerCase() === inputEmail);
             const dynamicId = loggedInUser?.id || inputEmail.split('').reduce((acc, char) => acc + char.charCodeAt(0), 100);
+            const isMyEmail = inputEmail === ADMIN_EMAIL.toLowerCase().trim();
+            const userRole = isMyEmail ? 'admin' : (loggedInUser?.role || 'user');
 
             dispatch(setUserProfile({
                 id: dynamicId,
                 name: inputEmail.split('@')[0], 
                 email: inputEmail,
                 image: "/images/icons/User_alt.svg",
-                password: password 
+                password: password,
+                role: userRole  
             }));
+            if (userRole === 'admin') {
+                router.push('/admin');
+            } else {
+                router.push(`/account/${dynamicId}?tab=info`);
+            }
         }
     };
 

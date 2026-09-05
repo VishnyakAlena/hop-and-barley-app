@@ -67,7 +67,6 @@ export default function OrderHistory({ orders }: OrderHistoryProps) {
                 </div>
                 <div className="order-table-body">
                     {currentOrders.map((order) => {
-                    // 🌟 Настройки для красивого текстового формата даты
                     const dateOptions: Intl.DateTimeFormatOptions = {
                         day: 'numeric',
                         month: 'short', // Показывает "мар." или "сент." (в зависимости от языка)
