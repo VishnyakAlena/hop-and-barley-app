@@ -15,12 +15,11 @@ export default function CheckoutForm() {
     const { products } = useAppSelector((state) => state.cart); 
     const totalCartPrice = useAppSelector(selectTotalCartPrice);
     const user = useAppSelector((state) => state.user.currentUser);
-
     const [paymentMethod, setPaymentMethod] = useState('debit');
     const [formErrors, setFormErrors] = useState<{ fullName?: string; phone?: string; city?: string; address?: string }>({});
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [isSubmitting, setIsPending] = useState(false);
-    const handlePlaceOrder = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handlePlaceOrder = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (isSubmitting) return; 
@@ -29,15 +28,11 @@ export default function CheckoutForm() {
         setSubmitError(null);
         setIsPending(true);
 
-        console.log("👉 КЛИК СРАБОТАЛ! Начинаем сбор данных формы...");
-
         const formData = new FormData(e.currentTarget);
         const fullName = String(formData.get('fullName') || '');
         const phone = String(formData.get('phone') || '');
         const city = String(formData.get('city') || '');
         const address = String(formData.get('address') || '');
-
-        console.log("👉 Собранные данные:", { fullName, phone, city, address, paymentMethod });
 
         // Валидация по нашей profileSchema (пропускает пустые строки для необязательных полей)
         const validation = profileSchema.safeParse({ full_name: fullName, phone, city, address });
@@ -83,9 +78,6 @@ export default function CheckoutForm() {
             throw new Error(result.message || "Failed to create order");
         }
 
-        // ========================================================
-        // 2. 🌟 ТЕПЕРЬ ОНО СРАБОТАЕТ НА 100%: Очищаем корзину на сервере
-        // Передаем флаг clearAll, который мы внедрили на Шаге 1
         await fetch('/api/cart', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
@@ -93,7 +85,6 @@ export default function CheckoutForm() {
         }).catch(err => console.error("Ошибка сброса серверной корзины:", err));
         
         console.log("=== КЛИЕНТ: Сигнал полной очистки успешно передан бэкенду ===");
-        // ========================================================
 
         // 3. Формируем объект для истории заказов в Redux (IOrder)
         const numericOrderId = result.orderId 
@@ -101,7 +92,8 @@ export default function CheckoutForm() {
             : Math.floor(100000 + Math.random() * 900000);
 
         const newFinishedOrder: IOrder = {
-            number: numericOrderId,                  
+            number: numericOrderId,  
+            userId: user?.id ? Number(user.id) : 0,                
             date: new Date().toISOString(),  
             status: 'Pending' as const, 
             items: products,                        

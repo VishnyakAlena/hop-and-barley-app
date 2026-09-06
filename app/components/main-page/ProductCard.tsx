@@ -23,6 +23,7 @@ function Product({product}:PropsType) {
                     height={247} 
                     alt={product.name}
                     loading="eager"
+                    style={{ height: 'auto' }}
                 />
             </div>
             <p>{product.name}</p>

@@ -4,7 +4,7 @@ import './RegisterStyle.css'
 import { useActionState, useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/app/store/storeHooks';
-import { registerNewUser } from '@/app/store/slices/userSlice';
+import { registerNewUser, setUserProfile } from '@/app/store/slices/userSlice'; // 🌟 ИМПОРТИРОВАЛИ setUserProfile
 import { validateRegisterAction, RegisterActionResponse } from '@/app/(pages)/(auth)/register/actions';
 import { IUserMock } from '@/app/types';
 import { useRouter } from 'next/navigation';
@@ -51,13 +51,13 @@ export default function RegisterForm() {
             email: validatedEmail,
             password: validatedPassword,
             image: "/images/icons/User_alt.svg",
-            phone: '', city: '', address: '', orders: []
+            phone: '', city: '', address: '', orders: [] // Массив заказов железно инициализирован!
         };
 
-        // 🌟 Сначала отправляем в Redux (он сам обновит localStorage внутри себя!)
+        // 1. Сначала сохраняем в общий список пользователей Redux (для админа)
         dispatch(registerNewUser(newUser));
 
-        // Формируем список для NextAuth, принудительно добавив нового юзера к текущему стейту
+        // Формируем список для NextAuth
         const updatedUsersList = [...allUsers, newUser];
 
         signIn('credentials', {
@@ -69,16 +69,31 @@ export default function RegisterForm() {
             if (res?.error) {
                 setSubmitError(res.error);
             } else {
+                // 🌟 ИСПРАВЛЕНО: Устанавливаем пользователя как активного в профиле Redux!
+                // Это заставит стейт currentUser наполниться данными и синхронизирует 
+                // все будущие заказы этого человека с общей базой данных админа.
+                dispatch(setUserProfile({
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    image: newUser.image,
+                    password: newUser.password,
+                    role: 'user' // по умолчанию обычный пользователь
+                }));
+
                 router.push(`/account/${dynamicId}?tab=info`);
             }
         });
 
-    }, [state.timestamp, router, dispatch, rememberMe, allUsers]); // Добавили allUsers в зависимости
+    }, [state.timestamp, router, dispatch, rememberMe, allUsers]);
 
     return (
         <div className="auth-form-container">
             <div className="auth-container auth-container--register">
                 <div className="Legend"><h1 className="auth-title">Register</h1></div>
+                {/* 🌟 Добавлен вывод ошибки сабмита, если NextAuth вернет сбой */}
+                {submitError && <div className="text-red-500 text-sm mb-4 text-center">{submitError}</div>}
+                
                 <form className="auth-form" action={formAction} noValidate>
                     <div className="InputField">
                         <label htmlFor="email">Email</label>

@@ -146,13 +146,13 @@ export default function HomeCatalogContent() {
                 <div className="sidebar__section">
                     <h3 className="section-title">Product Type</h3>
                     <div className="checkbox-group">
-                        {availableCategories.map((type) => (
-                            <label key={type} className="checkbox-container">
-                                {type}
+                        {availableCategories.map((categoryName) => (
+                            <label key={categoryName} className="checkbox-container">
+                                {categoryName}
                                 <input 
                                     type="checkbox" 
-                                    checked={selectedKeywords.includes(type)}
-                                    onChange={() => handleKeywordToggle(type)}
+                                    checked={selectedKeywords.includes(categoryName)}
+                                    onChange={() => handleKeywordToggle(categoryName)}
                                 />
                                 <span className="checkmark"></span>
                             </label>

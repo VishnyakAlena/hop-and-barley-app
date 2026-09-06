@@ -1,3 +1,4 @@
+import { IOrder } from '@/app/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ICheckoutInfo {
@@ -32,9 +33,10 @@ export const orderSlice = createSlice({
         clearOrderState: (state) => {
             state.checkoutInfo = null;
             state.isSuccess = false;
-        }
+        },
     }
 });
 
 export const { saveCheckoutInfo, setOrderSuccess, clearOrderState } = orderSlice.actions;
+
 export default orderSlice.reducer;

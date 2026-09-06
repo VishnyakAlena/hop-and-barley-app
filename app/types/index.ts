@@ -45,7 +45,7 @@ export interface IUserMock {
     phone?: string;   
     city?: string;    
     address?: string;
-    orders?: any[]; 
+    orders: any[]; 
     password?: string;
     role?: string;
 }
@@ -54,6 +54,7 @@ export type IUsersAllInfoResponse = IUserMock[]
 
 export interface IOrder {
     number: number;
+    userId: number;
     date: string;
     status: 'Pending' | 'Shipped' | 'Delivered' | 'Confirmed';
     items: ICartProduct[];

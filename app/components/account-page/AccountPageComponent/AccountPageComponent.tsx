@@ -10,7 +10,7 @@ interface AccountPageComponentProps {
     currentTab: string;
 }
 
-export default function AccountPageComponent({ userId, currentTab }: AccountPageComponentProps) {
+export default function AccountPageComponent({ currentTab }: AccountPageComponentProps) {
     const user = useAppSelector((state) => state.user.currentUser);
 
     return (

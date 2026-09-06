@@ -1,5 +1,5 @@
 import { IOrder, IUserMock } from '@/app/types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
     users: IUserMock[];
@@ -38,9 +38,15 @@ export const userSlice = createSlice({
         registerNewUser: (state, action: PayloadAction<IUserMock>) => {
             const exists = state.users.some(u => u.email.toLowerCase() === action.payload.email.toLowerCase());
             if (!exists) {
-                state.users.push(action.payload);
+                state.users.push({
+                    ...action.payload,
+                    orders: action.payload.orders || [] 
+                });
+                
                 // Синхронизируем localStorage сразу
-                localStorage.setItem('mock_users_db', JSON.stringify(state.users));
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('mock_users_db', JSON.stringify(state.users));
+                }
             }
         },
 
@@ -132,30 +138,35 @@ export const userSlice = createSlice({
 
         updateOrderStatus: (
             state, 
-            action: PayloadAction<{ email: string; orderNumber: number; newStatus: IOrder['status'] }>
+            action: PayloadAction<{ orderNumber: number; newStatus: IOrder['status'] }> // 🌟 УБРАЛИ email из параметров!
         ) => {
-            const { email, orderNumber, newStatus } = action.payload;
+            const { orderNumber, newStatus } = action.payload;
 
-            // 1. Обновляем статус в общей базе всех пользователей Redux
-            const userInDb = state.users.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
-            if (userInDb && userInDb.orders) {
-                const order = userInDb.orders.find(o => o.number === orderNumber);
-                if (order) {
-                    order.status = newStatus;
+            // 1. Иммутабельно перебираем ВСЕХ юзеров и обновляем нужный заказ по его уникальному номеру
+            state.users = state.users.map(user => {
+                const hasOrder = user.orders?.some(o => o.number === orderNumber);
+                if (hasOrder) {
+                    return {
+                        ...user,
+                        orders: user.orders.map(order => 
+                            order.number === orderNumber ? { ...order, status: newStatus } : order
+                        )
+                    };
+                }
+                return user;
+            });
+
+            // 2. Также обновляем у текущего активного пользователя на экране, если это его заказ
+            if (state.currentUser && state.currentUser.orders) {
+                const hasOrder = state.currentUser.orders.some(o => o.number === orderNumber);
+                if (hasOrder) {
+                    state.currentUser.orders = state.currentUser.orders.map(order => 
+                        order.number === orderNumber ? { ...order, status: newStatus } : order
+                    );
                 }
             }
 
-            // 2. Обновляем статус у текущего активного пользователя на экране
-            if (state.currentUser && state.currentUser.email.toLowerCase() === email.toLowerCase().trim()) {
-                if (state.currentUser.orders) {
-                    const order = state.currentUser.orders.find(o => o.number === orderNumber);
-                    if (order) {
-                        order.status = newStatus;
-                    }
-                }
-            }
-
-            // 3. Железобетонно синхронизируем изменения с локальной памятью браузера
+            // 3. Железно сохраняем чистые обновленные данные в память браузера
             if (typeof window !== 'undefined') {
                 localStorage.setItem('mock_users_db', JSON.stringify(state.users));
             }
@@ -169,4 +180,29 @@ export const userSlice = createSlice({
 });
 
 export const { initUsersDB, registerNewUser, updateUserPassword, setUserProfile, updateUserFields, addOrderToHistory, updateOrderStatus, clearUserProfile } = userSlice.actions;
+const selectUsersList = (state: { user: UserState }) => state.user.users;
+
+export const allOrdersInfo = createSelector(
+    [selectUsersList],
+    (users) => {
+        // Мы НЕ пишем console.log здесь, чтобы не спамить в консоль браузера
+        if (!users || !Array.isArray(users)) return [];
+
+        const allOrders: IOrder[] = [];
+        
+        // Проходим по каждому пользователю в локальной БД
+        users.forEach(user => {
+            if (user.orders && user.orders.length > 0) {
+                // Копируем заказы иммутабельно, чтобы не мутировать исходный стейт
+                allOrders.push(...user.orders);
+            }
+        });
+
+        // 🌟 ВАЖНО: Метод .sort() мутирует исходный массив! 
+        // В Redux Toolkit мутации внутри селекторов могут приводить к багам ссылочной идентичности.
+        // Поэтому мы делаем копию через деструктуризацию [...allOrders] перед сортировкой:
+        return [...allOrders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+);
+
 export default userSlice.reducer;

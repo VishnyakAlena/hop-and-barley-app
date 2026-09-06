@@ -22,11 +22,11 @@ header {
     display: flex;
     align-items: center;
     gap: 24px;
+    flex-shrink: 0;
 }
 
 .header__logo img {
     width: 26px;
-    height: 37.52px;
     border-radius: 8px;
 }
 
@@ -35,6 +35,7 @@ header {
     font-weight: 700;
     line-height: 1;
     color: var(--black-main);
+    margin-right: 16px;
 }
 
 .header__nav-and-auth {
@@ -92,6 +93,7 @@ header {
     padding-top: 2px;
     padding-bottom: 2px;
     cursor: pointer;
+    margin-right: 12px;
 }
 
 .burger-icon .line1, 
@@ -130,6 +132,17 @@ header {
 
 body.lock-scroll {
     overflow: hidden;
+}
+
+.user-icon, .user-icon image {
+    flex-shrink: 0;
+}
+
+@media (max-width: 1050px) {
+    .header__nav ul {
+        justify-content: center;
+        row-gap: 0px;
+    }
 }
 
 @media (max-width: 768px) {

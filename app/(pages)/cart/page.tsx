@@ -65,7 +65,7 @@ export default function CartPage() {
             <div className="cart-container">
                 <h1 className="cart-title">Shopping Cart</h1>
                     <div className="cart-items-list">
-                        {products.map(item => <div className="cart-item">
+                        {products.map(item => <div key={item.product.id} className="cart-item">
                             <Image 
                                 src={item.product.image} 
                                 alt={item.product.name} 
@@ -87,7 +87,7 @@ export default function CartPage() {
                                     <div className="cart-item__quantity-selector">
                                         <button className="quantity-btn-cart" onClick={() => removeFromCart(item.product)}>
                                             <svg width="11" height="2" viewBox="0 0 11 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M0.799988 0.800003H10.1333" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M0.799988 0.800003H10.1333" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                                             </svg>
                                         </button>
                                         <span className="quantity-value-cart">{item.quantity}</span>
