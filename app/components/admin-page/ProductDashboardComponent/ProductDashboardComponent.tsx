@@ -49,7 +49,7 @@ export default function ProductDashboard() {
             if (categoryItems.length === 0) return;
 
             const orderCategorySales = categoryItems.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
-            const orderCategoryQuantity = categoryItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+            const orderCategoryQuantity = categoryItems.filter(item => item.product?.category === activeCategory).length;
             const isPending = order.status === 'Pending';
             const userId = order.userId || order.number; 
 

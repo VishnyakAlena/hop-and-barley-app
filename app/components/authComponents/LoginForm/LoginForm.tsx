@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link'; 
 import './LoginFormStyle.css';
 import { loginSchema } from '@/app/schemas/schemas';
+import { ADMIN_EMAIL } from '@/app/constants';
 
 export default function LoginForm() {
     const { data: session, status } = useSession();
@@ -28,23 +29,18 @@ export default function LoginForm() {
     // Синхронизация сессии NextAuth (Google/GitHub или обычная сессия после перезагрузки)
     useEffect(() => {
         if (session?.user?.email && !isAuth) {
-            const ADMIN_EMAIL = "vishnyak-elena@mail.ru";
-            const isMyEmail = session.user.email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim();
-            const sessionRole = isMyEmail ? 'admin' : ((session.user as any).role || 'user');
-
             dispatch(setUserProfile({
                 name: session.user.name || 'User',
                 email: session.user.email,
                 image: session.user.image || '/images/icons/User_alt.svg',
-                role: sessionRole 
             }));
         }
     }, [session, isAuth, dispatch]);
 
     // Умный редирект
     useEffect(() => {
-        if (isAuth && currentUser && currentUser.role) {
-            if (currentUser.role === 'admin') {
+        if (isAuth && currentUser && currentUser.email) {
+            if (currentUser.email === ADMIN_EMAIL) {
                 router.push('/admin');
             } else {
                 router.push(`/account/${currentUser.id}?tab=info`);
@@ -82,14 +78,13 @@ export default function LoginForm() {
                 if (savedUsers) finalUsersList = JSON.parse(savedUsers);
             }
         }
-
-
+        
         // Передаем allUsers напрямую из Redux — теперь он никогда не будет пустым!
         const result = await signIn('credentials', {
             email: inputEmail,
             password: password,
             redirect: false, 
-            usersJson: JSON.stringify(finalUsersList) 
+            usersJson: JSON.stringify(finalUsersList),
         });
 
         if (result?.error) {
@@ -97,21 +92,17 @@ export default function LoginForm() {
                 password: "Invalid email or password!"
             });
         } else {
-            const ADMIN_EMAIL = "vishnyak-elena@mail.ru";
             const loggedInUser = finalUsersList.find(u => u.email.toLowerCase() === inputEmail);
             const dynamicId = loggedInUser?.id || inputEmail.split('').reduce((acc, char) => acc + char.charCodeAt(0), 100);
-            const isMyEmail = inputEmail === ADMIN_EMAIL.toLowerCase().trim();
-            const userRole = isMyEmail ? 'admin' : (loggedInUser?.role || 'user');
 
             dispatch(setUserProfile({
                 id: dynamicId,
                 name: inputEmail.split('@')[0], 
                 email: inputEmail,
                 image: "/images/icons/User_alt.svg",
-                password: password,
-                role: userRole  
+                password: password, 
             }));
-            if (userRole === 'admin') {
+            if (inputEmail === ADMIN_EMAIL) {
                 router.push('/admin');
             } else {
                 router.push(`/account/${dynamicId}?tab=info`);
@@ -128,14 +119,30 @@ export default function LoginForm() {
                     <form className="auth-form" onSubmit={handleEmailLogin} noValidate>
                         <div className="InputField">
                             <label htmlFor="email">Email</label>
-                            <input type="email" id="email" name="email" className="Input" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                className="Input" 
+                                value={email} 
+                                onChange={(e) => setEmail(e.target.value)} 
+                                autoComplete="username"
+                                required
+                            />
                             {formErrors.email && (
                                 <span className="text-grey-500 text-sm mt-1 block">{formErrors.email}</span>
                             )}
                         </div>
                         <div className="InputField">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" className="Input" autoComplete="current-password" required/>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                className="Input" 
+                                autoComplete="current-password" 
+                                required
+                            />
                             {formErrors.password && (
                                 <span className="text-grey-500 text-sm mt-1 block">{formErrors.password}</span>
                             )}

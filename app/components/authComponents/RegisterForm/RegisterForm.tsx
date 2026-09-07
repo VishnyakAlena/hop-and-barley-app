@@ -45,54 +45,46 @@ export default function RegisterForm() {
 
         const dynamicId = validatedEmail.split('').reduce((acc, char) => acc + char.charCodeAt(0), 100);
 
+        // 🌟 1. Создаем пользователя для общей базы Redux (ПАРОЛЬ ТУТ ЕСТЬ И ХРАНИТСЯ)
         const newUser: IUserMock = {
             id: dynamicId,
             name: validatedEmail.split('@')[0], 
             email: validatedEmail,
-            password: validatedPassword,
+            password: validatedPassword, // Сохраняем пароль в базу!
             image: "/images/icons/User_alt.svg",
-            phone: '', city: '', address: '', orders: [] // Массив заказов железно инициализирован!
+            phone: '', city: '', address: '', orders: [] 
         };
 
-        // 1. Сначала сохраняем в общий список пользователей Redux (для админа)
         dispatch(registerNewUser(newUser));
-
-        // Формируем список для NextAuth
         const updatedUsersList = [...allUsers, newUser];
 
         signIn('credentials', {
             email: validatedEmail,
             password: validatedPassword,
             usersJson: JSON.stringify(updatedUsersList), 
-            redirect: false 
+            redirect: false
         }).then((res) => {
             if (res?.error) {
                 setSubmitError(res.error);
             } else {
-                // 🌟 ИСПРАВЛЕНО: Устанавливаем пользователя как активного в профиле Redux!
-                // Это заставит стейт currentUser наполниться данными и синхронизирует 
-                // все будущие заказы этого человека с общей базой данных админа.
                 dispatch(setUserProfile({
                     id: newUser.id,
                     name: newUser.name,
                     email: newUser.email,
-                    image: newUser.image,
-                    password: newUser.password,
-                    role: 'user' // по умолчанию обычный пользователь
+                    image: newUser.image
                 }));
 
                 router.push(`/account/${dynamicId}?tab=info`);
             }
         });
 
-    }, [state.timestamp, router, dispatch, rememberMe, allUsers]);
+    }, [state.timestamp, router, dispatch, rememberMe]);
 
     return (
         <div className="auth-form-container">
             <div className="auth-container auth-container--register">
                 <div className="Legend"><h1 className="auth-title">Register</h1></div>
-                {/* 🌟 Добавлен вывод ошибки сабмита, если NextAuth вернет сбой */}
-                {submitError && <div className="text-red-500 text-sm mb-4 text-center">{submitError}</div>}
+                {submitError && <div className="text-grey-500 text-sm mb-4 text-center">{submitError}</div>}
                 
                 <form className="auth-form" action={formAction} noValidate>
                     <div className="InputField">

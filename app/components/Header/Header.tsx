@@ -10,7 +10,7 @@ import { usersAllInfo } from "@/app/db/UsersDB";
 import { signOut, useSession } from "next-auth/react";
 import { setCart } from "@/app/store/slices/cartSlice";
 import { useSelector } from "react-redux";
-
+import { ADMIN_EMAIL } from "@/app/constants";
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -150,8 +150,6 @@ export default function Header() {
 
         return () => clearInterval(interval); 
         
-        // 🌟 ТЕПЕРЬ СЛЕДИМ ЗА КОЛИЧЕСТВОМ ВСЕХ ЗАКАЗОВ В СИСТЕМЕ
-        // Больше никакой привязки к сессии админа или пользователя!
     }, [globalOrdersList.length, dispatch]);
 
     return (
@@ -216,15 +214,15 @@ export default function Header() {
                             <div className="header__user-actions header__auth-user" id="auth-user">
                                 {/* Иконка профиля: админа ведет на /admin, обычного юзера — в его аккаунт */}
                                 <Link 
-                                    href={currentUser.role === 'admin' ? "/admin" : `/account/${currentUser.id}`} 
+                                    href={currentUser.email === ADMIN_EMAIL ? "/admin" : `/account/${currentUser.id}`} 
                                     className="user-icon" 
-                                    aria-label={currentUser.role === 'admin' ? "Admin Panel" : "My Account"}
+                                    aria-label={currentUser.email === ADMIN_EMAIL ? "Admin Dashboard" : "My Account"}
                                 >
                                     <Image src={currentUser.image || "/images/icons/User_alt.svg"} width={32} height={32} alt="User Account" />
                                 </Link>
                                 
                                 {/* Кнопка выхода для админа или корзина для пользователя */}
-                                {currentUser.role === 'admin' ? (
+                                {currentUser.email === ADMIN_EMAIL ? (
                                     <button 
                                         type="button"
                                         onClick={() => signOut({ callbackUrl: '/login' })} 

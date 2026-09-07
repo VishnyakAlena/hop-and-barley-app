@@ -47,7 +47,6 @@ export interface IUserMock {
     address?: string;
     orders: any[]; 
     password?: string;
-    role?: string;
 }
 
 export type IUsersAllInfoResponse = IUserMock[]

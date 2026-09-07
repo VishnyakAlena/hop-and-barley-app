@@ -4,13 +4,17 @@ import { usersAllInfo } from "@/app/db/UsersDB"; // Убедитесь, что �
 import { revalidatePath } from 'next/cache';
 
 // Наш экшен по вашей аналогии, принимает userId и formData
-export async function updateProfileAction(userEmail: string, formData: FormData) {
+export async function updateProfileAction(prevState: any, formData: FormData) {
     
-    // Забираем данные из инпутов по значению их атрибутов 'name'
+    const userEmail = formData.get('user_email') ? String(formData.get('user_email')) : "";
     const fullName = formData.get('full_name');
     const phone = formData.get('phone');
     const city = formData.get('city');
     const address = formData.get('address');
+
+    if (!userEmail) {
+        return { success: false, message: "Email пользователя не указан" };
+    }
 
     // Находим индекс пользователя в массиве по его ID
     const userIndex = usersAllInfo.findIndex(u => u.email === userEmail);
@@ -23,8 +27,12 @@ export async function updateProfileAction(userEmail: string, formData: FormData)
         usersAllInfo[userIndex].address = address ? String(address) : "";
 
         console.log(`[Server Action] Данные пользователя ID ${userEmail} успешно обновлены!`);
+
+        revalidatePath(`/account/${userEmail}`);
+
+        // Возвращаем объект успеха
+        return { success: true, message: "Данные успешно сохранены!" };
     }
 
-    // По вашей аналогии: очищаем кэш этой страницы, чтобы инпуты сразу обновились новыми defaultValue
-    revalidatePath(`/account/${userEmail}`);
+    return { success: false, message: "Пользователь не найден в базе данных" };
 }

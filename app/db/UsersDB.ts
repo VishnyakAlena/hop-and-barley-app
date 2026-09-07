@@ -361,17 +361,6 @@ export let usersAllInfo: IUserMock[] = [
         address: '',
         orders: [], 
     },
-    {
-        id: 37,
-        name: "Елена Вишняк",
-        email: "vishnyak-elena@mail.ru",
-        image: '',
-        phone: '',
-        city: '',    
-        address: '',
-        orders: [], 
-        role: 'admin',
-    },
 ]
 
 export function ensureGitHubUserExists(githubUser: { name: string; email: string; image?: string | null }) {

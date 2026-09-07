@@ -73,8 +73,8 @@ export default function AccountInfoForm() {
                         name="email" 
                         className="Input" 
                         placeholder="example@mail.com" 
-                        defaultValue={user?.email || ""}
-                        disabled 
+                        defaultValue={user?.email || ""} 
+                        readOnly
                     />
                 </div>
                 <div className="checkout-form-group">
@@ -101,7 +101,14 @@ export default function AccountInfoForm() {
                     ></textarea>
                     {state.errors?.address && <span className="text-grey-500 text-sm mt-1">{state.errors.address}</span>}
                 </div>
-                <button type="submit" className="button button--primary button--full-width" disabled={isPending}>Save</button>
+                {state.success && !isPending && (
+                    <div className="form-success-message" style={{ color: '#2e7d32', backgroundColor: '#edf7ed', padding: '10px', borderRadius: '4px',  textAlign: 'center', fontSize: '14px' }}>
+                        Profile updated successfully!
+                    </div>
+                )}
+                <button type="submit" className="button button--primary button--full-width" disabled={isPending}>
+                    {isPending ? "Saving..." : "Save"}
+                </button>
                 <button className="button button--secondary button--full-width" onClick={handleLogout}>Logout</button>
             </form>
             </div>

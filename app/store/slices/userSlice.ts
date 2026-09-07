@@ -64,7 +64,7 @@ export const userSlice = createSlice({
                     name: formattedName || "User",
                     email: email,
                     image: action.payload.image || "/images/icons/User_alt.svg",
-                    phone: '', city: '', address: '', orders: []
+                    phone: '', city: '', address: '', orders: [],
                 };
                 
                 (existingUser as any).password = action.payload.password || '123456';
