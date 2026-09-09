@@ -1,7 +1,13 @@
+'use client';
 import {  Suspense } from "react";
 import Image from "next/image";
 
-import HomeCatalogContent from "./components/main-page/HomeCatalogContent";
+import dynamic from 'next/dynamic';
+
+const HomeCatalogContentNoSSR = dynamic(
+    () => import('@/app/components/main-page/HomeCatalogContent'), // Укажи точный путь к файлу каталога
+    { ssr: false } // 🌟 ПОЛНОСТЬЮ ОТКЛЮЧАЕТ SSR ДЛЯ ЭТОГО КОМПОНЕНТА
+);
 
 export default function Home() {
     return (
@@ -11,7 +17,7 @@ export default function Home() {
                 <div className="hero-banner__overlay"></div>
             </section>
             <Suspense fallback={<div className="container text-center py-12">Loading catalog...</div>}>
-                <HomeCatalogContent />
+                <HomeCatalogContentNoSSR />
             </Suspense>
         </main>
     );

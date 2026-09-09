@@ -17,7 +17,7 @@ const getInitialUsers = (): IUserMock[] => {
 };
 
 const initialState: UserState = {
-    users: getInitialUsers(), // 🌟 Исправлено: теперь подтягивается автоматически!
+    users: getInitialUsers(), 
     currentUser: null,
     isAuth: false,
 };

@@ -1,28 +1,31 @@
+'use client'; // 🌟 1. Превращаем страницу в Client Component
+
+import { use } from 'react'; // Нужен в Next.js 15 для разворачивания params на клиенте
+import { useSelector } from 'react-redux';
+import { allProductsInfo } from '@/app/store/slices/addProductsReviewsSlice';
 import ProductPageComponent from "@/app/components/ProductPageComponent/ProductPageComponent";
-import { Iproduct, IReviewFull } from "@/app/types";
-import Image from 'next/image'
-import './productPageStyle.css'
+import './productPageStyle.css';
 
 interface IParams {
     params: Promise<{
-        id: string
-    }>
+        id: string;
+    }>;
 }
 
-export default async function ProductPage({ params }: IParams) {
-    const { id } = await params
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/productInfo/${id}`, {
-            next: { 
-                // revalidate: 60 * 60,
-                revalidate: 0,
-            }
-        });
-    const data:Iproduct = await response.json() 
+export default function ProductPage({ params }: IParams) {
+    // 🌟 2. Разворачиваем параметры URL на клиенте с помощью React.use()
+    const { id } = use(params);
+
+    // 🌟 3. Брать товары напрямую из живого Redux стора (а не через fetch с сервера!)
+    const allProducts = useSelector(allProductsInfo);
+
+    // 🌟 4. Ищем товар в живой базе, приводя ID к строке (защита от нестыковки типов Date.now())
+    const product = allProducts.find((p: any) => String(p.id) === String(id));
+
     return (
         <section>
-            <ProductPageComponent product={data}/>
-            
+            {/* Передаем найденный в Redux товар в компонент отображения */}
+            <ProductPageComponent product={product} />
         </section>
-    )
+    );
 }

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from 'next/link'; 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
-import { allProductsInfo } from "@/app/store/slices/productSlice"; // Укажите ваш точный путь к слайсу
+import { allProductsInfo } from "@/app/store/slices/addProductsReviewsSlice"; // Укажите ваш точный путь к слайсу
 import Product from "./ProductCard";
 import './HomeCatalogContentStyle.css'
 
@@ -35,24 +35,24 @@ export default function HomeCatalogContent() {
         router.push(`?${params.toString()}`);
     };
 
-    const availableCategories = useMemo(() => {
+    const availableCategories = useMemo<string[]>(() => {
         // Вытаскиваем поле category из каждого товара
-        const allCategories = allProducts.map(product => product.category);
+        const allCategories = allProducts.map((product: any) => product.category);
         
         // Фильтруем пустые значения (если у какого-то товара нет категории)
-        const validCategories = allCategories.filter(category => !!category);
+        const validCategories = allCategories.filter((category: any) => !!category);
         
         // Передаем массив в Set, чтобы удалить дубликаты, и превращаем обратно в массив
         // Сортировка .sort() выстроит категории по алфавиту (Adjuncts, Hops, Malts...)
-        return Array.from(new Set(validCategories)).sort();
+        return Array.from(new Set(validCategories)).sort() as string[];
     }, [allProducts]);
 
     const filteredAndSortedProducts = useMemo(() => {
-        let items = [...allProducts];
+        let items = allProducts.filter((product: any) => !product.isHidden);
 
         // ШАГ 1: Сначала фильтруем по чекбоксам (если хоть один выбран)
         if (selectedKeywords.length > 0) {
-            items = items.filter(product => {
+            items = items.filter((product: any) => {
                 return selectedKeywords.some(keyword => 
                     product.category?.toLowerCase() === keyword.toLowerCase()
                 );
@@ -61,27 +61,27 @@ export default function HomeCatalogContent() {
 
         // ШАГ 2: К полученному результату (items) применяем текстовый поиск
         if (searchQuery.trim() !== "") {
-            items = items.filter(product => 
+            items = items.filter((product: any) => 
                 product.name?.toLowerCase().includes(searchQuery.toLowerCase().trim())
             );
         }
 
         // ШАГ 3: Сортируем то, что осталось после фильтраций (Обратная по ID для "New")
         if (sortBy === "new") {
-            items.sort((a, b) => Number(b.id) - Number(a.id));
+            items.sort((a: any, b: any) => Number(b.id) - Number(a.id));
         }
         if (sortBy === "price-asc") {
-            items.sort((a, b) => Number(a.price) - Number(b.price));
+            items.sort((a: any, b: any) => Number(a.price) - Number(b.price));
         }
         if (sortBy === "price-desc") {
-            items.sort((a, b) => Number(b.price) - Number(a.price));
+            items.sort((a: any, b: any) => Number(b.price) - Number(a.price));
         }
         if (sortBy === "rating") {
             const getTotalStars = (product: any) => {
                 const reviews = product.latestReviews || [];
                 return reviews.reduce((sum: number, review: any) => sum + (review.rating || 0), 0);
             };
-            items.sort((a, b) => getTotalStars(b) - getTotalStars(a));
+            items.sort((a: any, b: any) => getTotalStars(b) - getTotalStars(a));
         }
 
         return items;
@@ -179,7 +179,6 @@ export default function HomeCatalogContent() {
                                 placeholder="Search" 
                                 className="search-input" 
                                 value={searchQuery}
-                                // 🌟 При каждом вводе буквы обновляем стейт и сбрасываем пагинацию на 1 страницу
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
                                     const params = new URLSearchParams(searchParams.toString());
@@ -208,7 +207,7 @@ export default function HomeCatalogContent() {
                 {/* ВЫВОД КАТАЛОГА ТОВАРОВ */}
                 {currentProducts.length > 0 ? (
                     <div className="product-grid">
-                        {currentProducts?.map((product) => (
+                        {currentProducts?.map((product: any) => (
                             <Product key={product.id} product={product}/>
                         ))}
                     </div>
@@ -240,9 +239,7 @@ export default function HomeCatalogContent() {
                                 {pageNumbers.map((number) => (
                                     <Link
                                         key={number}
-                                        // 🌟 ИСПРАВЛЕНО: Добавлены правильные бэктики для шаблона URL
                                         href={`?page=${number}`}
-                                        // 🌟 ИСПРАВЛЕНО: Добавлены бэктики для динамического класса активности
                                         className={`pagination__link ${currentPage === number ? 'active' : ''}`}
                                         onClick={(e) => {
                                             e.preventDefault();

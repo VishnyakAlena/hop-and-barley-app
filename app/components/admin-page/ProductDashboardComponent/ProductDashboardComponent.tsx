@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import './ProductDashboardComponentStyle.css'
-import { allProductsInfo } from '@/app/store/slices/productSlice';
+import { allProductsInfo } from '@/app/store/slices/addProductsReviewsSlice';
 import { useSelector } from 'react-redux';
 import { allOrdersInfo } from '@/app/store/slices/userSlice';
 

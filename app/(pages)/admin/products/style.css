@@ -1,0 +1,111 @@
+.admin-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.admin-content__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--black-main);
+}
+
+.admin-add-product-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 8px;
+    width: 145px;
+    height: 40px;
+}
+
+.admin-table-wrapper {
+    width: 100%;
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; 
+    font: 500 16px var(--font-family);
+    color: var(--black-main);
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 20px;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 1px solid var(--border-default);
+}
+
+.admin-table thead {
+    background-color: var(--background-green);
+}
+
+.admin-table th {
+    font-weight: 700;
+    color: var(--black-main);
+}
+
+.management-pagination {
+    width: 100%;
+    margin-top: 32px;
+    background-color: var(--background-default);
+    border-radius: 16px;
+    border: 1px solid var(--border-default);
+    padding: clamp(12px, 2vw, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(4px, 0.5vw, 8px);
+}
+
+.management-pagination-list {
+    display: flex;
+    gap: clamp(4px, 0.5vw, 8px);
+    margin: 0 16px;
+}
+
+.management-pagination__link {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--black-main);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
+
+.management-pagination__link--prev:hover,
+.management-pagination__link--next:hover {
+    opacity: 1;
+    color: var(--black-main);
+}
+
+.management-pagination__link:hover:not(.active) {
+    background-color: #e0e0e0;
+}
+
+.management-pagination__link.active {
+    background-color: var(--black-main);
+    color: var(--white-text);
+}
+
+.management-pagination__link.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+    color: var(--grey-text);
+    opacity: 0.5;
+}

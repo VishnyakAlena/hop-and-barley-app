@@ -5,7 +5,7 @@ import { Iproduct, IReviewFull } from '../../types'
 import { useEffect, useState } from 'react'
 import './ProductPageStyle.css'
 import { useCartActions } from '@/app/hooks/useCartActions'
-import { allProductsInfo } from '@/app/store/slices/productSlice'
+import { allProductsInfo } from '@/app/store/slices/addProductsReviewsSlice'
 import { useAppSelector } from '@/app/store/storeHooks'
 
 type PropsType = {
@@ -26,7 +26,7 @@ function ProductPageComponent({product}:PropsType) {
     const allProductsWithReviews = useAppSelector(allProductsInfo);
     
     // Находим текущий товар в этом обогащенном массиве
-    const productWithReview = allProductsWithReviews.find(p => p.id === product.id);
+    const productWithReview = allProductsWithReviews.find((p: any) => p.id === product.id);
     
     // Достаем готовые отзывы (если товара или отзывов нет — ставим пустой массив)
     const reviews = productWithReview?.latestReviews || [];
@@ -54,9 +54,17 @@ function ProductPageComponent({product}:PropsType) {
                             </div>
                         </div>
                         <div className='product-description'>
-                            {product.description.map((paragraph, index) => (
-                                <p key={index}>{paragraph}</p>
-                            ))}
+                            {Array.isArray(product.description) ? (
+                                // Если Zod успешно отработал и вернул массив абзацев
+                                product.description.map((paragraph: string, index: number) => (
+                                    <p key={index}>{paragraph}</p>
+                                ))
+                            ) : typeof product.description === 'string' ? (
+                                // Страховочный вариант: если где-то в Redux проскочила сырая строка
+                                (product.description as string).split('\n').map((paragraph: string, index: number) => (
+                                    <p key={index}>{paragraph}</p>
+                                ))
+                            ) : null}
                         </div>
                         <div className="cart-controls">
                             {cartProduct ? 

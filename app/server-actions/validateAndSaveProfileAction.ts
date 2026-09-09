@@ -2,8 +2,6 @@
 
 import { profileSchema } from "@/app/schemas/schemas";
 
-
-
 export interface ProfileActionResponse {
     success: boolean;
     errors?: {

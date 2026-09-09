@@ -16,7 +16,7 @@ export interface IReviewFull {
 export interface Iproduct {
     id: number,
     name: string,
-    unitMetrics: string,
+    unitMetrics?: string,
     price: number,
     shortDescription: string,
     description: string[],
@@ -24,6 +24,7 @@ export interface Iproduct {
     technicalSpecifications: ISpecificationsItem[],
     latestReviews?: IReviewFull[],
     category: string,
+    isHidden?: boolean;
     createdAt: string,
     updatedAt: string;
 }

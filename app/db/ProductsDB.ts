@@ -1,4 +1,4 @@
-export const productsWitoutUsersofReviews = [
+export let productsWitoutUsersofReviews = [
     { 
         id: 1, 
         name: 'Citra Hops',
