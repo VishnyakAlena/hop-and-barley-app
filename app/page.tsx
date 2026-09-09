@@ -1,11 +1,24 @@
-import ProductsList from "./components/main-page/ProductsList";
+'use client';
+import {  Suspense } from "react";
+import Image from "next/image";
+
+import dynamic from 'next/dynamic';
+
+const HomeCatalogContentNoSSR = dynamic(
+    () => import('@/app/components/main-page/HomeCatalogContent'), 
+    { ssr: false } 
+);
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-          <ProductsList />
-      </main>
-    </div>
-  );
+    return (
+        <main>
+            <section className="hero-banner">
+                <Image src="/images/background/hopfen-fields.jpg" width={1312} height={400} alt="Beautiful hops on a dark background" className="hero-banner__image" priority />
+                <div className="hero-banner__overlay"></div>
+            </section>
+            <Suspense fallback={<div className="container text-center py-12">Loading catalog...</div>}>
+                <HomeCatalogContentNoSSR />
+            </Suspense>
+        </main>
+    );
 }

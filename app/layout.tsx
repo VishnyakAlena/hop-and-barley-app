@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
+import Header from "./components/Header/Header";
 import Providers from "./components/Providers";
 import StoreProvider from "./store/storeProvider";
+import DynamicFooter from "./components/Footer/DynamicFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,11 +29,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
           <Providers>
-            <Header />
+            <StoreProvider>
+              <Header />
+                {children}
+              <DynamicFooter />
+            </StoreProvider>
           </Providers>
-          <StoreProvider>
-            {children}
-          </StoreProvider>
       </body>
     </html>
   );
