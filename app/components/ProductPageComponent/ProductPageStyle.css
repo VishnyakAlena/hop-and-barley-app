@@ -1,0 +1,222 @@
+.page-product {
+    background-color: var(--background-grey);
+    padding: 64px 0;
+}
+
+.product-container {
+    width: 100%;
+}
+
+.page-product .container > section {
+    margin-bottom: 64px;
+}
+.page-product .container > section:last-child {
+    margin-bottom: 0;
+}
+
+.product-details-section {
+    display: flex;
+    width: 100%;
+    height: 484px;
+    gap: 32px;
+    align-items: stretch;
+}
+
+.product-image-container {
+    width: 50%;
+    flex-shrink: 0;
+    align-items: center;
+    position: relative;
+}
+
+.product-image {
+    width: 100%;
+    max-width: 640px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.product-info-column {
+    display: flex;
+    width: 50%;           
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 24px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.product-title-price {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.product-name {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--black-main);
+}
+
+.price-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.price-tag {
+    font-size: 16px;
+    line-height: 1;
+    color: var(--green);
+    background-color: var(--background-green);
+    padding: 8px;
+    border-radius: 8px;
+    align-self: flex-start;
+}
+
+.product-price {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--black-main);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-description {
+    font-size: clamp(12px, 0.35vw + 11px, 16px);
+    line-height: 1.4;
+    color: var(--black-main);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0px, 1.3vw - 4px, 16px);
+}
+
+.add-to-cart-button {
+    width: 304px;
+    height: 40px;
+    padding: 12px;
+    gap: 8px;
+}
+
+.quantity-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-default);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 0 12px;
+}
+
+.quantity-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: var(--black-main);
+    transition: background-color 0.2s ease;
+}
+
+.quantity-btn:hover {
+    background-color: var(--slate-200);
+}
+
+.quantity-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark-green);
+}
+
+.accordion-section {
+    width: 50%;
+}
+
+.accordion-item {
+    width: 100%;
+    background-color: white;
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.accordion-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.accordion-title h3 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #1e1e1e;
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding-top 0.3s ease;
+}
+
+.accordion-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.accordion-content li {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 500px;
+    padding-top: 16px;
+}
+.accordion-item.active .accordion-icon {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+    .product-details-section {
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 24px; 
+        height: auto;
+    }
+
+    .product-image-container {
+        width: 100%; 
+        height: 350px; 
+        overflow: hidden; 
+        display: block;
+    }
+
+    .product-info-column, .accordion-section {
+        width: 100%; 
+    }
+
+    .cart-controls {
+        display: flex;
+        justify-content: center;
+    }
+}

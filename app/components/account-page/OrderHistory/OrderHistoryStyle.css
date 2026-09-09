@@ -1,0 +1,55 @@
+.order-history-table {
+    width: 100%;
+    background-color: var(--background-default);
+    border-radius: 16px;
+    border: 1px solid var(--border-default);
+    overflow: hidden; /* To clip corners of header */
+}
+
+.order-table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; /* 3-column layout */
+    background-color: var(--background-green);
+    font-weight: 700;
+}
+
+.order-table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    border-top: 1px solid var(--border-default);
+}
+
+.order-table-cell {
+    padding: 20px;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-date {
+    color: var(--grey-text);
+}
+
+.account-pagination {
+    margin-top: 24px;
+    padding: 24px;
+    background-color: var(--background-default);
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination-link-account {
+    font-size: 16px;
+    color: var(--black-main);
+    font-weight: 500;
+}
+
+.pagination-link-account.disabled {
+    color: var(--grey-text);
+    opacity: 0.5;
+    pointer-events: none;
+}

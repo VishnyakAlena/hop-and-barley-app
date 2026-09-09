@@ -1,0 +1,26 @@
+.admin-table td:not(.description-cell) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-table tbody tr:hover {
+    position: relative;
+    z-index: 99;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table td {
+    color: var(--black-main);
+    vertical-align: middle;
+}
+
+.button--edit {
+    border-radius: 8px;
+    padding: 8px;
+    width: 50px;
+    height: 32px;
+}
