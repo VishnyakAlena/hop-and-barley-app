@@ -5,7 +5,7 @@ interface EditPageProps {
 }
 
 export default async function EditProductPage({ params }: EditPageProps) {
-    // Разворачиваем параметры роута в Next.js 15
+
     const { id } = await params; 
 
     return (

@@ -33,8 +33,6 @@ export default function CheckoutForm() {
         const phone = String(formData.get('phone') || '');
         const city = String(formData.get('city') || '');
         const address = String(formData.get('address') || '');
-
-        // Валидация по нашей profileSchema (пропускает пустые строки для необязательных полей)
         const validation = profileSchema.safeParse({ full_name: fullName, phone, city, address });
         if (!validation.success) {
             const fieldErrors = validation.error.flatten().fieldErrors;
@@ -48,7 +46,6 @@ export default function CheckoutForm() {
             return;
         }
 
-        // 2. Объединяем информацию о доставке, оплате и товары из корзины Redux
         const fullOrderPayload = {
             user: {
                 id: user?.id,
@@ -65,7 +62,6 @@ export default function CheckoutForm() {
         };
 
         try {
-        // 1. Отправляем сам заказ на сервер
         const response = await fetch('/api/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -86,7 +82,6 @@ export default function CheckoutForm() {
         
         console.log("=== КЛИЕНТ: Сигнал полной очистки успешно передан бэкенду ===");
 
-        // 3. Формируем объект для истории заказов в Redux (IOrder)
         const numericOrderId = result.orderId 
             ? parseInt(result.orderId.replace(/\D/g, ''), 10) 
             : Math.floor(100000 + Math.random() * 900000);
@@ -101,11 +96,9 @@ export default function CheckoutForm() {
             paymentMethod: paymentMethod            
         };
 
-        // 4. Очищаем локальный Redux стейт и добавляем заказ в историю
         dispatch(addOrderToHistory(newFinishedOrder));
         dispatch(clearCart()); // Счетчик на клиенте падает в 0
 
-        // 5. Перенаправляем пользователя в личный кабинет на историю заказов
         router.push(`/account/${user?.id}?tab=orders&success=true`);
 
     } catch (err: any) {
@@ -115,7 +108,6 @@ export default function CheckoutForm() {
     }
     };
 
-    // Защита: если корзина пустая, выводим заглушку вместо формы
     if (!products || products.length === 0) {
         return (
             <div className="checkout-empty-state flex flex-col items-start justify-start text-center py-6">
@@ -134,7 +126,6 @@ export default function CheckoutForm() {
                     {submitError}
                 </div>
             )}
-
             <form id="checkout-form" onSubmit={handlePlaceOrder} noValidate>
                         <section className="checkout-section">
                             <h2 className="checkout-section__title">Shipping information</h2>
@@ -191,7 +182,6 @@ export default function CheckoutForm() {
                                 {formErrors.address && <span className="text-grey-500 text-sm mt-1 block">{formErrors.address}</span>}
                             </div>
                         </section>
-
                         <section className="checkout-section">
                             <h2 className="checkout-section__title">Payment Method</h2>
                             <div className="payment-options">
@@ -230,7 +220,6 @@ export default function CheckoutForm() {
                                 </label>
                             </div>
                         </section>
-
                         <section className="checkout-summary">
                             <h2 className="checkout-section__title">Order Summary</h2>
                             <div className="summary-details">

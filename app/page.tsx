@@ -5,8 +5,8 @@ import Image from "next/image";
 import dynamic from 'next/dynamic';
 
 const HomeCatalogContentNoSSR = dynamic(
-    () => import('@/app/components/main-page/HomeCatalogContent'), // Укажи точный путь к файлу каталога
-    { ssr: false } // 🌟 ПОЛНОСТЬЮ ОТКЛЮЧАЕТ SSR ДЛЯ ЭТОГО КОМПОНЕНТА
+    () => import('@/app/components/main-page/HomeCatalogContent'), 
+    { ssr: false } 
 );
 
 export default function Home() {

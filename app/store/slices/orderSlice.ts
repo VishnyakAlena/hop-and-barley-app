@@ -1,4 +1,3 @@
-import { IOrder } from '@/app/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ICheckoutInfo {
@@ -23,7 +22,6 @@ export const orderSlice = createSlice({
     name: 'order',
     initialState,
     reducers: {
-        // Сохраняем информацию о пользователе и методе оплаты
         saveCheckoutInfo: (state, action: PayloadAction<ICheckoutInfo>) => {
             state.checkoutInfo = action.payload;
         },

@@ -163,7 +163,6 @@
     padding: 12px;
 }
 
-
 @media (max-width: 768px) {
     .cart-item {
         flex-direction: column;

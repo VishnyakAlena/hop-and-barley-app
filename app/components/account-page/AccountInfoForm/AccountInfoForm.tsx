@@ -17,10 +17,8 @@ export default function AccountInfoForm() {
     const dispatch = useAppDispatch();
     const user = useAppSelector((state) => state.user.currentUser);
 
-    // Подключаем Server Action черезuseActionState
     const [state, formAction, isPending] = useActionState(validateAndSaveProfileAction, initialState);
 
-    // Эффект успешного сохранения: записываем данные в Redux только после одобрения Zod
     useEffect(() => {
         if (state.success && state.data) {
             dispatch(updateUserFields({
@@ -33,8 +31,8 @@ export default function AccountInfoForm() {
 }, [state.success, state.data, dispatch]);
 
     const handleLogout = () => {
-        dispatch(clearUserProfile()); // Очищаем Redux и localStorage
-        signOut({ callbackUrl: '/login' }); // Разлогиниваем NextAuth
+        dispatch(clearUserProfile()); 
+        signOut({ callbackUrl: '/login' }); 
     };
 
     return (

@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import { ICartProduct } from '@/app/types';
 
-// Имитация серверной базы данных корзины в памяти Node.js
 let serverCart: ICartProduct[] = [];
 
-// GET: Получить текущую корзину
 export async function GET() {
     return NextResponse.json(serverCart);
 }
@@ -13,7 +11,6 @@ export async function POST(request: Request) {
     try {
         const body = await request.json();
         
-        // 🌟 СТРАХОВКА: Если с фронтенда пришла команда полной очистки корзины
         if (body.clearAll === true) {
             serverCart = [];
             console.log("=== СЕРВЕР: Корзина успешно очищена через POST ===");
@@ -47,12 +44,10 @@ export async function POST(request: Request) {
     }
 }
 
-// DELETE: Уменьшить количество товара на 1, удалить полностью ИЛИ очистить всю корзину
 export async function DELETE(request: Request) {
     try {
         const body = await request.json();
         
-        // 🌟 СТРАХОВКА: Если с фронтенда пришел запрос на полную очистку корзины
         if (body.clearAll === true) {
             serverCart = [];
             console.log("=== СЕРВЕР: Корзина успешно очищена через DELETE ===");
@@ -61,7 +56,6 @@ export async function DELETE(request: Request) {
 
         const { product, deleteAll } = body;
 
-        // Ваша стандартная проверка на наличие продукта (теперь она не упадет при clearAll)
         if (!product || !product.id) {
             return NextResponse.json({ error: 'Invalid product data' }, { status: 400 });
         }

@@ -4,53 +4,38 @@ import { useState, useMemo } from "react";
 import Link from 'next/link'; 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
-import { allProductsInfo } from "@/app/store/slices/addProductsReviewsSlice"; // Укажите ваш точный путь к слайсу
+import { allProductsInfo } from "@/app/store/slices/addProductsReviewsSlice"; 
 import Product from "./ProductCard";
 import './HomeCatalogContentStyle.css'
-
 
 export default function HomeCatalogContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-
-    // Получаем мемоизированный список продуктов из Redux
     const allProducts = useSelector(allProductsInfo);
-
     const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState<"new" | "price-asc" | "price-desc" | "rating">("new");
     const [isSortVisible, setIsSortVisible] = useState(false);
-
-    // Обработчик клика по чекбоксу или крестику на плашке
+    
     const handleKeywordToggle = (keyword: string) => {
         setSelectedKeywords(prev => 
             prev.includes(keyword) 
-                ? prev.filter(k => k !== keyword) // Удаляем, если галочку сняли
-                : [...prev, keyword]              // Добавляем, если галочку поставили
+                ? prev.filter(k => k !== keyword) 
+                : [...prev, keyword]              
         );
-
-        // Принудительно сбрасываем пагинацию на 1 страницу в URL при смене фильтра
         const params = new URLSearchParams(searchParams.toString());
         params.set("page", "1");
         router.push(`?${params.toString()}`);
     };
 
     const availableCategories = useMemo<string[]>(() => {
-        // Вытаскиваем поле category из каждого товара
         const allCategories = allProducts.map((product: any) => product.category);
-        
-        // Фильтруем пустые значения (если у какого-то товара нет категории)
         const validCategories = allCategories.filter((category: any) => !!category);
-        
-        // Передаем массив в Set, чтобы удалить дубликаты, и превращаем обратно в массив
-        // Сортировка .sort() выстроит категории по алфавиту (Adjuncts, Hops, Malts...)
         return Array.from(new Set(validCategories)).sort() as string[];
     }, [allProducts]);
 
     const filteredAndSortedProducts = useMemo(() => {
         let items = allProducts.filter((product: any) => !product.isHidden);
-
-        // ШАГ 1: Сначала фильтруем по чекбоксам (если хоть один выбран)
         if (selectedKeywords.length > 0) {
             items = items.filter((product: any) => {
                 return selectedKeywords.some(keyword => 
@@ -58,15 +43,11 @@ export default function HomeCatalogContent() {
                 );
             });
         }
-
-        // ШАГ 2: К полученному результату (items) применяем текстовый поиск
         if (searchQuery.trim() !== "") {
             items = items.filter((product: any) => 
                 product.name?.toLowerCase().includes(searchQuery.toLowerCase().trim())
             );
         }
-
-        // ШАГ 3: Сортируем то, что осталось после фильтраций (Обратная по ID для "New")
         if (sortBy === "new") {
             items.sort((a: any, b: any) => Number(b.id) - Number(a.id));
         }
@@ -83,23 +64,18 @@ export default function HomeCatalogContent() {
             };
             items.sort((a: any, b: any) => getTotalStars(b) - getTotalStars(a));
         }
-
         return items;
     }, [allProducts, selectedKeywords, sortBy, searchQuery]);
 
-    // ЛОГИКА ПАГИНАЦИИ (по 12 товаров)
     const pageParam = searchParams.get("page");
     const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
     const itemsPerPage = 12; 
-
     const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
     const indexOfLastItem = indexOfFirstItem + itemsPerPage;
-    
-    // Срезаем элементы из отфильтрованного и отсортированного списка
     const currentProducts = filteredAndSortedProducts.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
-    
     const pageNumbers = [];
+
     for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
     }
@@ -141,8 +117,6 @@ export default function HomeCatalogContent() {
                         ))}
                     </div>
                 </div>
-
-                {/* УПРАВЛЯЕМЫЕ ЧЕКБОКСЫ (Связанные со стейтом) */}
                 <div className="sidebar__section">
                     <h3 className="section-title">Product Type</h3>
                     <div className="checkbox-group">
@@ -160,7 +134,6 @@ export default function HomeCatalogContent() {
                     </div>
                 </div>
             </aside>
-
             <section className="products-area product-grid-section">
                 <div className="search-sort-bar">
                     <div className="search-wrapper">
@@ -193,8 +166,6 @@ export default function HomeCatalogContent() {
                             </button>
                         </div>
                     </div>
-                    
-                    {/* КНОПКИ СОРТИРОВКИ */}
                     <div className={`sort-options-container ${isSortVisible ? 'mobile-visible' : ''}`}>
                         <div className="sort-options">
                             <button className={`sort-button ${sortBy === "new" ? "active-sort" : ""}`} onClick={() => setSortBy("new")}><span>New</span></button>
@@ -204,7 +175,6 @@ export default function HomeCatalogContent() {
                         </div>
                     </div>
                 </div>
-                {/* ВЫВОД КАТАЛОГА ТОВАРОВ */}
                 {currentProducts.length > 0 ? (
                     <div className="product-grid">
                         {currentProducts?.map((product: any) => (
@@ -216,11 +186,8 @@ export default function HomeCatalogContent() {
                         No products found matching the criteria.
                     </div>
                 )}
-
-                {/* ПАГИНАЦИЯ (Ваш дополненный и исправленный блок) */}
                 {totalPages > 1 && (
                     <div className="pagination">
-                        {/* Кнопка НАЗАД */}
                         <Link 
                             href={`?page=${currentPage - 1}`}  
                             className={`pagination__link pagination__link--prev ${currentPage === 1 ? 'disabled' : ''}`} 
@@ -232,39 +199,35 @@ export default function HomeCatalogContent() {
                             <span>Previous</span>
                         </Link>
 
-                        {/* Номера страниц */}
 
-                            {/* Список номеров страниц */}
-                            <div className="pagination-list">
-                                {pageNumbers.map((number) => (
-                                    <Link
-                                        key={number}
-                                        href={`?page=${number}`}
-                                        className={`pagination__link ${currentPage === number ? 'active' : ''}`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            changePage(number);
-                                        }}
-                                    >
-                                        {number}
-                                    </Link>
-                                ))}
-                            </div>
-
-                            {/* Кнопка ВПЕРЕД */}
-                            <Link 
-                                href={`?page=${currentPage + 1}`}  
-                                className={`pagination__link pagination__link--next ${currentPage === totalPages ? 'disabled' : ''}`} 
-                                onClick={handleNextPage}
-                            >
-                                <span>Next</span>
-                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.66667 5.66667H11M6.33333 1L11 5.66667L6.33333 10.3333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </Link>
+                        <div className="pagination-list">
+                            {pageNumbers.map((number) => (
+                                <Link
+                                    key={number}
+                                    href={`?page=${number}`}
+                                    className={`pagination__link ${currentPage === number ? 'active' : ''}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        changePage(number);
+                                    }}
+                                >
+                                    {number}
+                                </Link>
+                            ))}
                         </div>
-                    )}
-                </section>
-            </div>
+                        <Link 
+                            href={`?page=${currentPage + 1}`}  
+                            className={`pagination__link pagination__link--next ${currentPage === totalPages ? 'disabled' : ''}`} 
+                            onClick={handleNextPage}
+                        >
+                            <span>Next</span>
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.66667 5.66667H11M6.33333 1L11 5.66667L6.33333 10.3333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </Link>
+                    </div>
+                )}
+            </section>
+        </div>
     );
 }

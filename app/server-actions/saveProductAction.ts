@@ -49,7 +49,6 @@ export async function saveProductAction(
 
         const { title, price, category, description } = validatedFields.data;
 
-        // --- ГЕНЕРАЦИЯ КРАТКОГО ОПИСАНИЯ ---
         const firstParagraph = Array.isArray(description) 
             ? (description[0] || '') 
             : (description || '');  
@@ -59,14 +58,12 @@ export async function saveProductAction(
             ? firstParagraph.slice(0, maxLength).trim() + '...'
             : firstParagraph;
 
-        // --- УМНАЯ ОБРАБОТКА КАРТИНКИ (Base64) ---
-        let imageUrl = '/images/Image-Preview.png'; // Дефолт для нового товара
+        let imageUrl = '/images/Image-Preview.png'; 
 
         if (productId && old_image) {
-            imageUrl = old_image; // Если редактируем, берем старую картинку
+            imageUrl = old_image; 
         }        
         
-        // 🌟 Если с клиента прилетела сконвертированная строка Base64, берём именно её!
         if (base64_image && base64_image.trim() !== '') {
             imageUrl = base64_image; 
         }

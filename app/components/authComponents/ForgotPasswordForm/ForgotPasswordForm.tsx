@@ -9,22 +9,13 @@ import './ForgotPasswordStyle.css';
 
 export default function ForgotPasswordForm() {
     const dispatch = useAppDispatch();
-    
-    // 🌟 Больше никаких useRef! Берем пользователей напрямую из реактивного стейта Redux
     const allUsers = useAppSelector((state) => state.user.users);
-
-    // Управляем этапами восстановления: 'email' | 'new-password' | 'success'
     const [step, setStep] = useState<'email' | 'new-password' | 'success'>('email');
-    
-    // Стейты данных полей
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
-    // Стейты раздельного вывода ошибок (строки)
     const [formErrors, setFormErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
 
-    // Подтягиваем сохраненный email из браузера при первом входе (если был сохранен)
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const savedEmail = localStorage.getItem('saved_login_email');
@@ -34,36 +25,27 @@ export default function ForgotPasswordForm() {
         }
     }, []);
 
-    // Хэндлер Шага 1: Проверка Email
     const handleEmailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormErrors({});
-
         const validation = forgotEmailSchema.safeParse({ email: email.toLowerCase().trim() });
         if (!validation.success) {
             const fieldErrors = validation.error.flatten().fieldErrors;
             setFormErrors({ email: fieldErrors.email?.[0] });
             return;
         }
-
-        // Проверяем в Redux, зарегистрирован ли такой пользователь (allUsers всегда актуален)
         const userExists = allUsers.some(u => u.email.toLowerCase() === email.toLowerCase().trim());
         if (!userExists) {
             setFormErrors({ email: "Пользователь с таким Email не найден!" });
             return;
         }
-
         setStep('new-password');
     };
 
-    // Хэндлер Шага 2: Сохранение нового пароля с проверкой равенства
     const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormErrors({});
-
-        // Вызываем Zod-схему (в ней уже заложена поочередная валидация и проверка равенства паролей)
         const validation = updatePasswordSchema.safeParse({ password, confirmPassword });
-        
         if (!validation.success) {
             const fieldErrors = validation.error.flatten().fieldErrors;
             setFormErrors({
@@ -72,11 +54,7 @@ export default function ForgotPasswordForm() {
             });
             return;
         }
-
-        // 🌟 Redux-слайс теперь сам обновит состояние и перезапишет `mock_users_db` в localStorage!
         dispatch(updateUserPassword({ email: email.toLowerCase().trim(), newPassword: password }));
-
-        // Переключаем на финальный экран успеха
         setStep('success');
     };
 
@@ -84,7 +62,6 @@ export default function ForgotPasswordForm() {
         <div className="auth-form-container">
             <div className="auth-container auth-container--forgot-password">
                 
-                {/* 1️⃣ ЭКРАН 1: Ввод Email */}
                 {step === 'email' && (
                     <>
                         <div className="Legend">
@@ -97,7 +74,7 @@ export default function ForgotPasswordForm() {
                                     type="email" id="email" name="email" className="Input" placeholder="Value" required 
                                     value={email} onChange={(e) => setEmail(e.target.value)}
                                 />
-                                {formErrors.email && <span className="text-red-500 text-sm mt-1 block">{formErrors.email}</span>}
+                                {formErrors.email && <span className="text-gray-500 text-sm mt-1 block">{formErrors.email}</span>}
                             </div>
                             <div className="ButtonGroup ButtonGroup--center">
                                 <Link href="/login" className="button button--cancel">Cancel</Link>
@@ -107,7 +84,6 @@ export default function ForgotPasswordForm() {
                     </>
                 )}
 
-                {/* 2️⃣ ЭКРАН 2: Ввод нового пароля */}
                 {step === 'new-password' && (
                     <>
                         <div className="Legend">
@@ -140,7 +116,6 @@ export default function ForgotPasswordForm() {
                     </>
                 )}
 
-                {/* 3️⃣ ЭКРАН 3: Успешное завершение */}
                 {step === 'success' && (
                     <div className="success-state text-center">
                         <div className="Legend">
@@ -156,7 +131,6 @@ export default function ForgotPasswordForm() {
                         </div>
                     </div>
                 )}
-                
             </div>
         </div>
     );

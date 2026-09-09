@@ -1,4 +1,4 @@
-import { ICartProduct, Iproduct } from "@/app/types";
+import { ICartProduct } from "@/app/types";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../index";
@@ -22,7 +22,6 @@ const cartSlice = createSlice({
             state.total = action.payload.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
         },
         
-        // Экшен для полной очистки корзины (понадобится после успешного оформления заказа)
         clearCart: (state) => {
             state.products = [];
             state.total = 0;

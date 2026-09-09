@@ -7,7 +7,6 @@ interface UserState {
     isAuth: boolean;
 }
 
-// 🌟 Читаем базу данных из LocalStorage ПРЯМО при старте приложения
 const getInitialUsers = (): IUserMock[] => {
     if (typeof window !== 'undefined') {
         const saved = localStorage.getItem('mock_users_db');
@@ -43,7 +42,6 @@ export const userSlice = createSlice({
                     orders: action.payload.orders || [] 
                 });
                 
-                // Синхронизируем localStorage сразу
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('mock_users_db', JSON.stringify(state.users));
                 }
@@ -53,12 +51,9 @@ export const userSlice = createSlice({
         setUserProfile: (state, action: PayloadAction<{ id?: number; name: string | string[]; email: string; image: string; password?: string; role?: string }>) => {
             const email = action.payload.email.toLowerCase().trim();
             let existingUser = state.users.find(u => u.email.toLowerCase() === email);
-
-            // Форматируем имя в строку, если пришел массив от split('@')
             const formattedName = Array.isArray(action.payload.name) ? action.payload.name[0] : action.payload.name;
 
             if (!existingUser) {
-                // Авто-регистрация (например, для OAuth Google/GitHub)
                 existingUser = {
                     id: action.payload.id || (state.users.length > 0 ? Math.max(...state.users.map(u => u.id)) + 1 : 1),
                     name: formattedName || "User",
@@ -77,7 +72,6 @@ export const userSlice = createSlice({
                 }
             }
 
-            // Восстановление кастомных полей профиля
             const savedData = localStorage.getItem(`user_fields_${email}`);
             if (savedData) {
                 const parsed = JSON.parse(savedData);
@@ -142,7 +136,6 @@ export const userSlice = createSlice({
         ) => {
             const { orderNumber, newStatus } = action.payload;
 
-            // 1. Иммутабельно перебираем ВСЕХ юзеров и обновляем нужный заказ по его уникальному номеру
             state.users = state.users.map(user => {
                 const hasOrder = user.orders?.some(o => o.number === orderNumber);
                 if (hasOrder) {
@@ -156,7 +149,6 @@ export const userSlice = createSlice({
                 return user;
             });
 
-            // 2. Также обновляем у текущего активного пользователя на экране, если это его заказ
             if (state.currentUser && state.currentUser.orders) {
                 const hasOrder = state.currentUser.orders.some(o => o.number === orderNumber);
                 if (hasOrder) {
@@ -166,7 +158,6 @@ export const userSlice = createSlice({
                 }
             }
 
-            // 3. Железно сохраняем чистые обновленные данные в память браузера
             if (typeof window !== 'undefined') {
                 localStorage.setItem('mock_users_db', JSON.stringify(state.users));
             }
@@ -185,22 +176,16 @@ const selectUsersList = (state: { user: UserState }) => state.user.users;
 export const allOrdersInfo = createSelector(
     [selectUsersList],
     (users) => {
-        // Мы НЕ пишем console.log здесь, чтобы не спамить в консоль браузера
         if (!users || !Array.isArray(users)) return [];
 
         const allOrders: IOrder[] = [];
         
-        // Проходим по каждому пользователю в локальной БД
         users.forEach(user => {
             if (user.orders && user.orders.length > 0) {
-                // Копируем заказы иммутабельно, чтобы не мутировать исходный стейт
                 allOrders.push(...user.orders);
             }
         });
 
-        // 🌟 ВАЖНО: Метод .sort() мутирует исходный массив! 
-        // В Redux Toolkit мутации внутри селекторов могут приводить к багам ссылочной идентичности.
-        // Поэтому мы делаем копию через деструктуризацию [...allOrders] перед сортировкой:
         return [...allOrders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
 );

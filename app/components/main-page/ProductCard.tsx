@@ -1,4 +1,3 @@
-
 import Image from 'next/image'
 import { Iproduct } from '../../types'
 import Link from 'next/link'; 

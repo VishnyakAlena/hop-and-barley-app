@@ -16,7 +16,6 @@ export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [wasOpened, setWasOpened] = useState(false); 
 
-    // 2. Блокируем скролл страницы при открытом меню
     useEffect(() => {
         const body = document.body;
         if (isMenuOpen) {
@@ -25,50 +24,39 @@ export default function Header() {
             body.classList.remove('lock-scroll');
         }
 
-        // Чистим класс при размонтировании компонента
         return () => {
             body.classList.remove('lock-scroll');
         };
     }, [isMenuOpen]);
 
-    // Эффект для обнуления состояний при переходе на десктоп
     useEffect(() => {
-        // Создаем медиа-запрос, аналогичный вашему CSS (768px)
         const mediaQuery = window.matchMedia("(max-width: 768px)");
-
         const handleResize = (e: MediaQueryListEvent | MediaQueryList) => {
-            // Если экран стал шире 768px (e.matches === false)
             if (!e.matches) {
-                setIsMenuOpen(false); // Принудительно закрываем
-                setWasOpened(false);  // Полностью обнуляем флаг первого открытия
+                setIsMenuOpen(false); 
+                setWasOpened(false);  
             }
         };
 
-        // Проверяем текущее состояние при монтировании
         handleResize(mediaQuery);
 
-        // Вешаем слушатель на изменение разрешения
         mediaQuery.addEventListener("change", handleResize);
 
-        // Чистим слушатель при размонтировании хедера
         return () => {
             mediaQuery.removeEventListener("change", handleResize);
         };
     }, []);
 
-    // 3. Функция переключения состояния меню
     const toggleMenu = () => {
         setIsMenuOpen(prev => !prev);
-        if (!wasOpened) setWasOpened(true); // Запоминаем первое открытие
+        if (!wasOpened) setWasOpened(true); 
     };
 
-    // 4. Функция принудительного закрытия при клике на ссылки
     const closeMenu = () => {
         setIsMenuOpen(false);
         setWasOpened(false);
     };
 
-    // Вычисляем динамический класс для анимации закрытия/открытия бургера
     const burgerMenu = `burger-menu ${
         isMenuOpen ? 'active' : (wasOpened ? 'closing' : '')
     }`;
@@ -76,7 +64,6 @@ export default function Header() {
     const dispatch = useAppDispatch();
     const { data: session } = useSession();
 
-    // 2. Объявляем новые переменные авторизации взамен Redux
     const { isAuth, currentUser } = useAppSelector((state) => state.user); 
     // Оставляем ТОЛЬКО первичную загрузку моков базы данных при старте сайта
     useEffect(() => {
@@ -84,7 +71,6 @@ export default function Header() {
     }, [dispatch]);
 
     useEffect(() => {
-        // Метка времени ?t=... заставляет браузер делать честный запрос к серверу
         fetch(`/api/cart?t=${Date.now()}`)
             .then((res) => res.json())
             .then((data) => {
@@ -106,33 +92,25 @@ export default function Header() {
     const globalOrdersList = useSelector(allOrdersInfo) || []; 
 
     useEffect(() => {
-        // Если в системе вообще нет заказов — спать
         if (!globalOrdersList || globalOrdersList.length === 0) return;
 
         const checkAndUpgradeStatuses = () => {
-            const now = Date.now(); // Текущее время
-
+            const now = Date.now(); 
             globalOrdersList.forEach((order) => {
-                const orderTime = new Date(order.date).getTime(); // Время создания заказа
-                const minutesPassed = (now - orderTime) / 1000 / 60; // Разница в минутах
-
-                // 1. Прошла 1 минута -> Из Pending в Confirmed
-                if (minutesPassed >= 5 && minutesPassed < 10 && order.status === 'Pending') {
+                const orderTime = new Date(order.date).getTime(); 
+                const minutesPassed = (now - orderTime) / 1000 / 60; 
+                if (minutesPassed >= 1 && minutesPassed < 10 && order.status === 'Pending') {
                     dispatch(updateOrderStatus({
                         orderNumber: order.number,
                         newStatus: 'Confirmed'
                     }));
                 }
-
-                // 2. Прошло 10 минут -> Из Confirmed в Shipped
                 if (minutesPassed >= 10 && minutesPassed < 20 && order.status === 'Confirmed') {
                     dispatch(updateOrderStatus({
                         orderNumber: order.number,
                         newStatus: 'Shipped'
                     }));
                 }
-
-                // 3. Прошло 20 минут -> Из Shipped в Delivered
                 if (minutesPassed >= 20 && order.status === 'Shipped') {
                     dispatch(updateOrderStatus({
                         orderNumber: order.number,
@@ -141,15 +119,9 @@ export default function Header() {
                 }
             });
         };
-
-        // Запускаем проверку сразу при монтировании шапки
         checkAndUpgradeStatuses();
-
-        // Каждые 10 секунд проверяем время заново
         const interval = setInterval(checkAndUpgradeStatuses, 10000);
-
         return () => clearInterval(interval); 
-        
     }, [globalOrdersList.length, dispatch]);
 
     return (
@@ -180,14 +152,11 @@ export default function Header() {
                                 </li>
                             </ul>
                         </nav>
-
                         <div className={`burger-icon ${isMenuOpen ? '_open' : ''}`} onClick={toggleMenu}>
                             <div className="line1"></div>
                             <div className="line2"></div>
                             <div className="line3"></div>
                         </div>
-
-                        {/* Выпадающее меню: вешаем на него динамические классы */}
                         {wasOpened && (
                             <div className={`${burgerMenu}`}>
                                 <ul>
@@ -209,10 +178,8 @@ export default function Header() {
                                 </ul>
                             </div>
                         )}
-
                         {isAuth && currentUser ? (
                             <div className="header__user-actions header__auth-user" id="auth-user">
-                                {/* Иконка профиля: админа ведет на /admin, обычного юзера — в его аккаунт */}
                                 <Link 
                                     href={currentUser.email === ADMIN_EMAIL ? "/admin" : `/account/${currentUser.id}`} 
                                     className="user-icon" 
@@ -220,8 +187,6 @@ export default function Header() {
                                 >
                                     <Image src={currentUser.image || "/images/icons/User_alt.svg"} width={32} height={32} alt="User Account" />
                                 </Link>
-                                
-                                {/* Кнопка выхода для админа или корзина для пользователя */}
                                 {currentUser.email === ADMIN_EMAIL ? (
                                     <button 
                                         type="button"
@@ -230,7 +195,6 @@ export default function Header() {
                                         aria-label="Sign Out"
                                         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                                     >
-                                        {/* Иконка выхода (дверь со стрелкой) под размер вашей корзины */}
                                         <svg fill="#000000" width="30px" height="30px" version="1.1" viewBox="144 144 512 512" xmlns="http://www.w3.org/2000/svg">
                                             <g>
                                             <path d="m619.61 424.27c1.0625-2.5664 1.0625-5.4531 0-8.0195-0.52344-1.2812-1.2969-2.4453-2.2773-3.4219l-41.984-41.984c-4.1172-3.9766-10.664-3.9219-14.711 0.12891-4.0508 4.0469-4.1055 10.594-0.12891 14.715l24.066 24.066h-100.61c-5.793 0-10.492 4.6992-10.492 10.496s4.6992 10.496 10.492 10.496h100.61l-24.066 24.066h0.003906c-2.0273 1.957-3.1797 4.6445-3.207 7.457-0.023438 2.8164 1.0859 5.5234 3.0742 7.5156 1.9922 1.9883 4.6992 3.0977 7.5156 3.0742 2.8125-0.027344 5.5-1.1797 7.457-3.207l41.984-41.984v0.003907c0.97266-0.97656 1.7422-2.1328 2.2656-3.4023z"/>
@@ -253,7 +217,6 @@ export default function Header() {
                                 >
                                     Sign in
                                 </Link>
-                                
                                 <Link 
                                     href="/register" 
                                     className="button button--primary"

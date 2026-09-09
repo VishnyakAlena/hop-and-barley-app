@@ -57,7 +57,7 @@ header {
 }
 
 .header__nav-link {
-    display: inline-block; /* Чтобы работал transform: scale */
+    display: inline-block; 
     padding: 8px;
     font-size: 16px;
     line-height: 1;

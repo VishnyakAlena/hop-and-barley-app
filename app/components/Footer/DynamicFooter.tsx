@@ -5,11 +5,8 @@ import Footer from "./Footer"; // Путь к вашему настоящему 
 
 export default function DynamicFooter() {
     const pathname = usePathname();
-
-    // Если страница начинается с /admin, футер не рендерится
     if (pathname.startsWith("/admin")) {
         return null;
     }
-
     return <Footer />;
 }

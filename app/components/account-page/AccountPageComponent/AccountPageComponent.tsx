@@ -6,7 +6,7 @@ import OrderHistory from "../OrderHistory/OrderHistory";
 import AccountInfoForm from "../AccountInfoForm/AccountInfoForm";
 
 interface AccountPageComponentProps {
-    userId: string; // Описываем, что ждем строковый ID от сервера
+    userId: string;
     currentTab: string;
 }
 

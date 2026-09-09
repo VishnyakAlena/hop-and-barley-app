@@ -5,8 +5,6 @@ import './AdminNavStyle.css'
 
 export default function AdminNav() {
     const pathname = usePathname();
-
-    // Проверяем, на каком URL находится пользователь
     const isDashboard = pathname === '/admin/dashboard';
     const isManagement = pathname.startsWith('/admin/products');
 

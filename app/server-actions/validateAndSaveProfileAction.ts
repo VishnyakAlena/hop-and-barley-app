@@ -27,10 +27,8 @@ export async function validateAndSaveProfileAction(prevState: any, formData: For
         address: formData.get('address'),
     };
 
-    // Проверяем данные через Zod
     const validatedFields = profileSchema.safeParse(rawData);
 
-    // Если Zod нашёл ошибки — возвращаем их списком на фронтенд
     if (!validatedFields.success) {
         return {
             success: false,

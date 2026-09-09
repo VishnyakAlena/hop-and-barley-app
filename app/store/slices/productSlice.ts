@@ -23,14 +23,12 @@ const productSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        // Редюсер для добавления нового товара
         addProduct: (state, action: PayloadAction<Iproduct>) => {
             state.products.push(action.payload);
             if (typeof window !== 'undefined') {
                 localStorage.setItem('mock_products_db', JSON.stringify(state.products));
             }
         },
-        // Редюсер для редактирования существующего товара
         updateProduct: (state, action: PayloadAction<Partial<Iproduct> & { id: number | string }>) => {
             const index = state.products.findIndex(p => String(p.id) === String(action.payload.id));
             if (index !== -1) {
@@ -59,11 +57,9 @@ const productSlice = createSlice({
         toggleHideProduct: (state, action: PayloadAction<number | string>) => {
             const index = state.products.findIndex(p => String(p.id) === String(action.payload));
             if (index !== -1) {
-                // Инвертируем текущий статус скрытия (если было false/undefined -> станет true)
                 state.products[index].isHidden = !state.products[index].isHidden;
                 state.products[index].updatedAt = new Date().toISOString().split('T')[0];
 
-                // Синхронизируем с LocalStorage
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('mock_products_db', JSON.stringify(state.products));
                 }

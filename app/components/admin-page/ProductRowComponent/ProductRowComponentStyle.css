@@ -1,11 +1,9 @@
-/* Применяем overflow: hidden ко всем ячейкам, КРОМЕ описания */
 .admin-table td:not(.description-cell) {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap; /* Для остальных ячеек (например, дат) это полезно */
+    white-space: nowrap;
 }
 
-/* При наведении на строку принудительно поднимаем её слой выше заголовка */
 .admin-table tbody tr:hover {
     position: relative;
     z-index: 99;

@@ -54,6 +54,5 @@ export function useCartActions() {
         }
     }
 
-    // Возвращаем функции наружу
     return { addToCart, removeFromCart, clearProductFromCart };
 }

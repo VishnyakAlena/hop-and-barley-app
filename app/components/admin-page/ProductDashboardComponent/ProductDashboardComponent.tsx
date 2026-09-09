@@ -5,14 +5,15 @@ import './ProductDashboardComponentStyle.css'
 import { allProductsInfo } from '@/app/store/slices/addProductsReviewsSlice';
 import { useSelector } from 'react-redux';
 import { allOrdersInfo } from '@/app/store/slices/userSlice';
+import { Iproduct } from '@/app/types';
 
 export default function ProductDashboard() {
     const allProducts = useSelector(allProductsInfo);
     const allOrders = useSelector(allOrdersInfo) || []; 
-    const availableCategories = useMemo(() => {
-            const allCategories = allProducts.map(product => product.category);
-            const validCategories = allCategories.filter(category => !!category);
-            return Array.from(new Set(validCategories)).sort();
+    const availableCategories = useMemo<string[]>(() => {
+            const allCategories = allProducts.map((product: any) => product.category);
+            const validCategories = allCategories.filter((category: string) => !!category);
+            return Array.from(new Set(validCategories)).sort() as any;
         }, [allProducts]);
         
     const [activeCategory, setActiveCategory] = useState(availableCategories[0]);
@@ -26,16 +27,12 @@ export default function ProductDashboard() {
     const stats = useMemo(() => {
         const now = new Date();
         const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        
         const startOfYesterday = new Date(startOfToday);
         startOfYesterday.setDate(startOfYesterday.getDate() - 1);
-
         const startOfPastWeek = new Date(startOfToday);
         startOfPastWeek.setDate(startOfPastWeek.getDate() - 7);
-
         const startOfTwoWeeksAgo = new Date(startOfToday);
         startOfTwoWeeksAgo.setDate(startOfTwoWeeksAgo.getDate() - 14);
-
         const rawData = {
             sales: { today: 0, yesterday: 0, total: 0 },
             users: { today: new Set(), yesterday: new Set() },
@@ -47,7 +44,6 @@ export default function ProductDashboard() {
             const orderDate = new Date(order.date);
             const categoryItems = order.items?.filter(item => item.product?.category === activeCategory) || [];
             if (categoryItems.length === 0) return;
-
             const orderCategorySales = categoryItems.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
             const orderCategoryQuantity = categoryItems.filter(item => item.product?.category === activeCategory).length;
             const isPending = order.status === 'Pending';
@@ -100,7 +96,6 @@ export default function ProductDashboard() {
         const usersDelta = calculateDelta(rawData.users.today.size, rawData.users.yesterday.size, 'yesterday');
         const ordersDelta = calculateDelta(rawData.orders.thisWeek, rawData.orders.pastWeek, 'past week');
         const pendingDelta = calculateDelta(rawData.pending.today, rawData.pending.yesterday, 'yesterday');
-
         const currencyFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
         const numberFormatter = new Intl.NumberFormat('en-US');
 
@@ -127,9 +122,7 @@ export default function ProductDashboard() {
                     </button>
                 ))}
             </div>
-            
             <div className="stats-grid">
-                
                 <div className="stat-card">
                     <div className="stat-card__header">
                         <span className="stat-card__title">Total Sales</span>
@@ -141,7 +134,6 @@ export default function ProductDashboard() {
                         </div>
                     </div>
                     <p className="stat-card__value">{stats.totalSales.value}</p>
-                    
                     <div className="stat-card__delta" style={{ color: 'var(--black-main)' }}>
                         {stats.totalSales.trend === 'up' && (
                             <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,7 +145,6 @@ export default function ProductDashboard() {
                                 <path d="M18.5636 18L21.2207 15.71L15.5584 10.83L10.9172 14.83L2.31934 7.41L3.95537 6L10.9172 12L15.5584 8L22.8683 14.29L25.5254 12V18H18.5636Z" fill="#F93C65"/>
                             </svg>
                         )}
-
                         {stats.totalSales.trend === 'neutral' && (
                             <span>•</span>
                         )}
@@ -161,7 +152,6 @@ export default function ProductDashboard() {
                         <span> {stats.totalSales.text}</span>
                     </div>
                 </div>
-                
                 <div className="stat-card">
                     <div className="stat-card__header">
                         <span className="stat-card__title">Total User</span>
@@ -173,7 +163,6 @@ export default function ProductDashboard() {
                         </div>
                     </div>
                     <p className="stat-card__value">{stats.totalUser.value}</p>
-                    
                     <div className="stat-card__delta" style={{ color: 'var(--black-main)' }}>
                         {stats.totalUser.trend === 'up' && (
                             <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +174,6 @@ export default function ProductDashboard() {
                                 <path d="M18.5636 18L21.2207 15.71L15.5584 10.83L10.9172 14.83L2.31934 7.41L3.95537 6L10.9172 12L15.5584 8L22.8683 14.29L25.5254 12V18H18.5636Z" fill="#F93C65"/>
                             </svg>
                         )}
-
                         {stats.totalUser.trend === 'neutral' && (
                             <span>•</span>
                         )}
@@ -193,7 +181,6 @@ export default function ProductDashboard() {
                         <span> {stats.totalUser.text}</span>
                     </div>
                 </div>
-
                 <div className="stat-card">
                     <div className="stat-card__header">
                         <span className="stat-card__title">Total Order</span>
@@ -205,7 +192,6 @@ export default function ProductDashboard() {
                         </div>
                     </div>
                     <p className="stat-card__value">{stats.totalOrder.value}</p>
-                    
                     <div className="stat-card__delta" style={{ color: 'var(--black-main)' }}>
                         {stats.totalOrder.trend === 'up' && (
                             <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -217,7 +203,6 @@ export default function ProductDashboard() {
                                 <path d="M18.5636 18L21.2207 15.71L15.5584 10.83L10.9172 14.83L2.31934 7.41L3.95537 6L10.9172 12L15.5584 8L22.8683 14.29L25.5254 12V18H18.5636Z" fill="#F93C65"/>
                             </svg>
                         )}
-
                         {stats.totalOrder.trend === 'neutral' && (
                             <span>•</span>
                         )}
@@ -225,7 +210,6 @@ export default function ProductDashboard() {
                         <span> {stats.totalOrder.text}</span>
                     </div>
                 </div>
-                
                 <div className="stat-card">
                     <div className="stat-card__header">
                         <span className="stat-card__title">Total Pending</span>
@@ -237,7 +221,6 @@ export default function ProductDashboard() {
                         </div>
                     </div>
                     <p className="stat-card__value">{stats.totalPending.value}</p>
-                    
                     <div className="stat-card__delta" style={{ color: 'var(--black-main)' }}>
                         {stats.totalPending.trend === 'up' && (
                             <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -249,7 +232,6 @@ export default function ProductDashboard() {
                                 <path d="M18.5636 18L21.2207 15.71L15.5584 10.83L10.9172 14.83L2.31934 7.41L3.95537 6L10.9172 12L15.5584 8L22.8683 14.29L25.5254 12V18H18.5636Z" fill="#F93C65"/>
                             </svg>
                         )}
-
                         {stats.totalPending.trend === 'neutral' && (
                             <span>•</span>
                         )}

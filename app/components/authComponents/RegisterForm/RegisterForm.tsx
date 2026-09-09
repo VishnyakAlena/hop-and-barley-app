@@ -4,8 +4,8 @@ import './RegisterStyle.css'
 import { useActionState, useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/app/store/storeHooks';
-import { registerNewUser, setUserProfile } from '@/app/store/slices/userSlice'; // 🌟 ИМПОРТИРОВАЛИ setUserProfile
-import { validateRegisterAction, RegisterActionResponse } from '@/app/(pages)/(auth)/register/actions';
+import { registerNewUser, setUserProfile } from '@/app/store/slices/userSlice';
+import { validateRegisterAction, RegisterActionResponse } from '@/app/server-actions/registerAction';
 import { IUserMock } from '@/app/types';
 import { useRouter } from 'next/navigation';
 
@@ -15,7 +15,6 @@ export default function RegisterForm() {
     const dispatch = useAppDispatch();
     const router = useRouter(); 
     const allUsers = useAppSelector((state) => state.user.users);
-
     const [rememberMe, setRememberMe] = useState(true);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [email, setEmail] = useState('');
@@ -45,7 +44,6 @@ export default function RegisterForm() {
 
         const dynamicId = validatedEmail.split('').reduce((acc, char) => acc + char.charCodeAt(0), 100);
 
-        // 🌟 1. Создаем пользователя для общей базы Redux (ПАРОЛЬ ТУТ ЕСТЬ И ХРАНИТСЯ)
         const newUser: IUserMock = {
             id: dynamicId,
             name: validatedEmail.split('@')[0], 
@@ -73,11 +71,9 @@ export default function RegisterForm() {
                     email: newUser.email,
                     image: newUser.image
                 }));
-
                 router.push(`/account/${dynamicId}?tab=info`);
             }
         });
-
     }, [state.timestamp, router, dispatch, rememberMe]);
 
     return (
@@ -85,7 +81,6 @@ export default function RegisterForm() {
             <div className="auth-container auth-container--register">
                 <div className="Legend"><h1 className="auth-title">Register</h1></div>
                 {submitError && <div className="text-grey-500 text-sm mb-4 text-center">{submitError}</div>}
-                
                 <form className="auth-form" action={formAction} noValidate>
                     <div className="InputField">
                         <label htmlFor="email">Email</label>

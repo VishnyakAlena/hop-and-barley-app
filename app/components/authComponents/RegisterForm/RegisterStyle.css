@@ -73,10 +73,9 @@
 
 .CheckboxField .checkbox-container {
     display: flex;
-    align-items: center;       /* Выравниваем текст и квадратик строго по одной линии */
-    justify-content: flex-start; /* 🌟 Ставим их друг за другом: сначала текст, потом квадратик */
-    gap: 12px;                  /* 🌟 Идеальный отступ между текстом и галочкой справа */
-    
+    align-items: center;       
+    justify-content: flex-start; 
+    gap: 12px;                 
     width: 100%;
     margin-bottom: 0;
     font-size: 16px;
@@ -86,7 +85,6 @@
     user-select: none;
 }
 
-/* Скрываем дефолтный инпут */
 .CheckboxField .checkbox-container input {
     position: absolute;
     opacity: 0;
@@ -95,10 +93,9 @@
     width: 0;
 }
 
-/* 🌟 Очищенный кастомный квадрат (теперь встает в поток справа от текста) */
 .CheckboxField .checkbox-container .checkmark {
-    position: relative;        /* 🌟 Убираем absolute! Меняем на relative для внутренней галочки */
-    flex-shrink: 0;            /* Запрещаем сжимать квадратик */
+    position: relative;        
+    flex-shrink: 0;            
     height: 16px;
     width: 16px;
     background-color: var(--background-grey);
@@ -107,43 +104,32 @@
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Меняем цвет бордера при наведении */
 .CheckboxField .checkbox-container:hover input ~ .checkmark {
     border-color: var(--green);
 }
 
-/* При клике красим подложку квадрата в зеленый */
 .CheckboxField .checkbox-container input:checked ~ .checkmark {
     background-color: var(--green);
     border-color: var(--green);
 }
 
-/* Стилизация иконки Font Awesome внутри квадрата (ее абсолют оставляем, она центрируется внутри .checkmark) */
 .CheckboxField .checkbox-container .checkmark:after {
-content: "";               /* 🌟 Очищаем код Font Awesome */
+content: "";               
     position: absolute;
     display: none;
-    
-    /* Позиционируем галочку по центру зеленого квадрата */
     left: 5px;
     top: 1px;
     width: 4px;
     height: 8px;
-    
-    /* 🌟 Рисуем птичку с помощью двух бордеров */
     border: solid white;
     border-width: 0 2px 2px 0;
-    
-    /* Поворачиваем рамки на 45 градусов, чтобы получилась галочка */
     transform: rotate(45deg); 
 }
 
-/* Показываем иконку при клике */
 .CheckboxField .checkbox-container input:checked ~ .checkmark:after {
     display: block;
 }
 
-/* ButtonGroup  */
 .ButtonGroup {
     width: 100%;
 }
@@ -154,13 +140,11 @@ content: "";               /* 🌟 Очищаем код Font Awesome */
     padding: 12px;
 }
 
-/* auth-switch - link "Already have an account?" */
 .auth-switch {
     margin-top: 0;
     font-size: 14px;
     color: var(--grey-text);
 }
-
 
 .auth-container--register {
     width: 416px;
@@ -174,8 +158,6 @@ content: "";               /* 🌟 Очищаем код Font Awesome */
     align-items: center;
     gap: 24px;
 }
-
-
 
 @media (max-width: 440px) {
     .auth-container--register {

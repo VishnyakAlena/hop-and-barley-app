@@ -13,12 +13,10 @@ export default function LoginForm() {
     const { data: session, status } = useSession();
     const dispatch = useAppDispatch();
     const router = useRouter();
-
     const { isAuth, currentUser, users: allUsers } = useAppSelector((state) => state.user); 
     const [email, setEmail] = useState('');
     const [formErrors, setFormErrors] = useState<{ email?: string; password?: string }>({});
 
-    // Подгрузка сохраненного email
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const savedEmail = localStorage.getItem('saved_login_email');
@@ -37,7 +35,6 @@ export default function LoginForm() {
         }
     }, [session, isAuth, dispatch]);
 
-    // Умный редирект
     useEffect(() => {
         if (isAuth && currentUser && currentUser.email) {
             if (currentUser.email === ADMIN_EMAIL) {
@@ -51,14 +48,12 @@ export default function LoginForm() {
     const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormErrors({});
-        
         const formData = new FormData(e.currentTarget);
         const inputEmail = String(formData.get('email') || '').toLowerCase().trim();
         const password = String(formData.get('password') || '');
         const clientValidated = loginSchema.safeParse({ email: inputEmail, password });
         if (!clientValidated.success) {
             const fieldErrors = clientValidated.error.flatten().fieldErrors;
-        // Извлекаем текст первых ошибок для каждого инпута
         setFormErrors({
             email: fieldErrors.email?.[0],
             password: fieldErrors.password?.[0]
@@ -70,7 +65,6 @@ export default function LoginForm() {
             localStorage.setItem('saved_login_email', inputEmail);
         }
 
-        // Восстанавливаем базу из localStorage, если Redux пуст
         let finalUsersList = allUsers;
         if (!finalUsersList || finalUsersList.length === 0) {
             if (typeof window !== 'undefined') {
@@ -79,7 +73,6 @@ export default function LoginForm() {
             }
         }
         
-        // Передаем allUsers напрямую из Redux — теперь он никогда не будет пустым!
         const result = await signIn('credentials', {
             email: inputEmail,
             password: password,
@@ -159,9 +152,7 @@ export default function LoginForm() {
                     <span>Or</span>
                     <div className="line-devider"><svg viewBox="0 0 166 1" fill="none"><path d="M0.5 0.5L165 0.5" stroke="#E2E2E2" strokeLinecap="round" /></svg></div>
                 </div>
-
                 <div className="social-login-providers">
-                    {/* Кнопка Google */}
                     <button type="button" onClick={() => signIn('google')} className="button button--secondary social-login-button">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
                             <path d="M21.7501 12.2242C21.7501 11.5615 21.6953 10.8951 21.5783 10.2431H12.1965V13.9976H17.569C17.3461 15.2084 16.6298 16.2796 15.5808 16.9603V19.3963H18.7861C20.6683 17.6982 21.7501 15.1905 21.7501 12.2242Z" fill="#4285F4" />
@@ -171,8 +162,6 @@ export default function LoginForm() {
                         </svg>
                         <span>Continue with Google</span>
                     </button>
-
-                    {/* Кнопка GitHub */}
                     <button type="button" onClick={() => signIn('github')} className="button button--secondary social-login-button">
                         {/* Иконка GitHub */}
                         <svg xmlns="http://w3.org" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">

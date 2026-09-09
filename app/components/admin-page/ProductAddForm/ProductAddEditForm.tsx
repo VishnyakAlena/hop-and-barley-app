@@ -29,40 +29,34 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
     const formRef = useRef<HTMLFormElement>(null); 
     const router = useRouter();
 
-    // Ищем продукт для редактирования
     const editingProduct = productId 
         ? allProducts.find((p: Iproduct) => String(p.id) === String(productId))
         : null;
 
     const isEditMode = !!editingProduct;
 
-    // Базовый текст описания
     const descriptionText = editingProduct
     ? (Array.isArray(editingProduct.description) 
         ? editingProduct.description.join('\n\n') // Соединяем абзацы двойным переносом строки
         : editingProduct.description)
     : '';
     
-
     const availableCategories = useMemo<string[]>(() => {
         const allCategories = allProducts.map((product: any) => product.category);
         const validCategories = allCategories.filter((category: any) => !!category);
         return Array.from(new Set(validCategories)).sort() as string[];
     }, [allProducts]);
 
-    // --- Управляемые состояния формы ---
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState<string>('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-
     const [base64Image, setBase64Image] = useState<string | null>(null);
 
     const boundAction = saveProductAction.bind(null, productId || null);
     const [state, formAction, isPending] = useActionState(boundAction, initialState);
 
-    // Инициализация данных при редактировании
     useEffect(() => {
         if (editingProduct) {
             setTitle(editingProduct.name || '');
@@ -79,17 +73,15 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
     useEffect(() => {
         if (state.success && state.data) {
             if (isEditMode) {
-                dispatch(updateProduct(state.data)); // Обновляем товар в Redux
+                dispatch(updateProduct(state.data)); 
             } else {
-                dispatch(addProduct(state.data)); // Добавляем новый товар в Redux
+                dispatch(addProduct(state.data)); 
             }
             alert(isEditMode ? 'Товар успешно обновлен!' : 'Товар успешно добавлен!');
             router.push('/admin/products');
         }
     }, [state.success, state.data, isEditMode, dispatch]);
 
-
-    // Очистка Blob-ссылок из памяти браузера при размонтировании страницы
     useEffect(() => {
         return () => {
             if (imagePreview && imagePreview.startsWith('blob:')) {
@@ -98,11 +90,9 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
         };
     }, [imagePreview]);
 
-    // Обработчик загрузки изображения с предотвращением утечек памяти
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            // Если в стейте уже была временная ссылка blob:, удаляем её перед созданием новой
             if (imagePreview && imagePreview.startsWith('blob:')) {
                 URL.revokeObjectURL(imagePreview);
             }
@@ -110,21 +100,20 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
             setImagePreview(objectUrl);
             const reader = new FileReader();
             reader.onloadend = () => {
-                setBase64Image(reader.result as string); // Тут будет строка вида "data:image/jpeg;base64,..."
+                setBase64Image(reader.result as string); 
             };
             reader.readAsDataURL(file);
         }
     };
 
     const handleHide = async () => {
-        if (!productId) return; // Если товар новый, скрывать нечего
+        if (!productId) return; 
 
         try {
             const res = await toggleHideProductAction(productId);
             if (res.success) {
                 dispatch(toggleHideProduct(productId));
                 
-                // Определяем, какое сообщение показать на основе текущего состояния
                 const willBeHidden = !editingProduct?.isHidden;
                 alert(willBeHidden ? 'Товар скрыт из каталога!' : 'Товар снова отображается в каталоге!');
                 
@@ -136,20 +125,15 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
     };
 
     const handleDelete = async () => {
-    if (!productId) return; // Если это создание нового товара, удалять нечего
+    if (!productId) return;
 
     if (confirm('Are you sure you want to delete this product?')) {
         try {
-            // 1. Вызываем серверный экшен для сброса кэша Next.js
             const res = await deleteProductAction(productId);
             
             if (res.success) {
-                // 2. Удаляем товар из живого Redux и localStorage
                 dispatch(deleteProduct(productId));
-                
                 alert('Товар успешно удален!');
-                
-                // 3. Перенаправляем админа на список товаров
                 router.push('/admin/products');
             } else {
                 alert('Ошибка при удалении товара на сервере');
@@ -160,7 +144,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
         }
     }
 };
-
     return (
         <div className="admin-form-layout">
             <div className="admin-form-upload-image">
@@ -183,8 +166,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                     </button>
                 </div>
             </div>
-
-            {/* Правая колонка: Информация */}
             <div className="admin-form-shipping-information">
                 <h2 className="admin-form-section-title">Shipping information</h2>
                 <form id="product-form" ref={formRef} className="product-info-form" action={formAction}>
@@ -198,7 +179,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                     />
                     <input type="hidden" name="old_image" value={editingProduct?.image || ''} />
                     <input type="hidden" name="base64_image" value={base64Image || ''} />
-
                     <div className="checkout-form-group">
                         <label htmlFor="prod-title">Title</label>
                         <input 
@@ -216,7 +196,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                         </span>
                     )}
                     </div>
-                    
                     <div className="checkout-form-group">
                         <label htmlFor="prod-description">Description</label>
                         <textarea 
@@ -234,7 +213,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                             </span>
                         )}
                     </div>
-                    
                     <div className="checkout-form-group">
                         <label htmlFor="prod-price">Price</label>
                         <input 
@@ -253,14 +231,12 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                             </span>
                         )}
                     </div>
-                    
                     <div className="checkout-form-group">
                         <label>Category</label>
                         <div className="category-tags">
                             <input type="hidden" name="category" value={category} />
                             {availableCategories.map((categoryName) => {
                                 const isActive = categoryName === category;
-                                
                                 return (
                                     <button 
                                         key={categoryName} 
@@ -268,7 +244,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                                         className={`category-tag ${isActive ? 'active' : ''}`}
                                         onClick={() => setCategory(categoryName)}
                                     >
-                                        {/* Если категория активна, рендерим галочку */}
                                         {isActive && (
                                             <svg 
                                                 className="category-icon-check" 
@@ -305,8 +280,6 @@ export default function ProductAddEditForm({ productId }: ProductAddEditFormProp
                     )}
                 </form>
             </div>
-
-            {/* Нижняя панель действий */}
             <div className="admin-form-actions">
                 <button 
                     type="button" 

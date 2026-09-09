@@ -44,7 +44,6 @@
     display: inline-block;
 }
 
-
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(304px, 1fr));
@@ -108,8 +107,4 @@
 
 .delta--neutral {
     color: var(--black-main);
-}
-
-@media (max-width: 768px) {
-
 }
